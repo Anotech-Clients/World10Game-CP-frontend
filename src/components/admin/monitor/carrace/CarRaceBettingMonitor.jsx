@@ -70,14 +70,20 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
   useEffect(() => {
     isComponentMounted.current = true;
     let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
+    let pingIntervalRef = null;
 
     const connect = () => {
       if (!isComponentMounted.current) return;
 
-      // Clear existing connection
+      // Clear existing connection safely
       if (wsRef.current) {
-        wsRef.current.close();
+        try {
+          wsRef.current.onclose = null;
+          wsRef.current.onerror = null;
+          wsRef.current.close();
+        } catch (e) {
+          console.warn("Error closing existing WebSocket:", e);
+        }
       }
 
       const accessToken = sessionStorage.getItem("accessToken");
@@ -91,6 +97,7 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
       
       try {
         console.log("🔌 Connecting to Car Race Monitor WebSocket:", wsUrl);
+        setConnectionStatus('connecting');
         const socket = new WebSocket(wsUrl);
         wsRef.current = socket;
 
@@ -107,13 +114,18 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
           reconnectAttempts = 0;
 
           // Send ping to keep connection alive
-          const pingInterval = setInterval(() => {
+          if (pingIntervalRef) clearInterval(pingIntervalRef);
+          pingIntervalRef = setInterval(() => {
             if (socket.readyState === WebSocket.OPEN) {
-              socket.send(JSON.stringify({ type: "ping" }));
+              try {
+                socket.send(JSON.stringify({ type: "ping" }));
+              } catch (e) {
+                console.warn("Ping failed:", e);
+              }
             } else {
-              clearInterval(pingInterval);
+              clearInterval(pingIntervalRef);
             }
-          }, 30000);
+          }, 25000);
         };
 
         socket.onmessage = (event) => {
@@ -121,12 +133,12 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
 
           try {
             const data = JSON.parse(event.data);
-            console.log("📊 Car Race Monitor received data:", data);
 
             // Handle Car Race monitor updates
             if (data.type === "carRaceMonitorUpdate" && data.data) {
               setMonitorData(data.data);
               setIsLoading(false);
+              setError(null);
             }
             else if (data.status === "connected") {
               console.log("✅ Car Race Monitor connection confirmed:", data.message);
@@ -134,67 +146,69 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
               setError(null);
             }
             else if (data.type === "pong") {
-              console.log("🏓 Pong received from Car Race monitor");
-            }
-            else {
-              console.log("📄 Other Car Race monitor message:", data.type);
+              // Pong received - connection healthy
             }
           } catch (err) {
             console.error("❌ Error processing Car Race monitor message:", err);
-            setError("Error processing monitor data: " + err.message);
           }
         };
 
         socket.onerror = (error) => {
           if (!isComponentMounted.current) return;
           console.error("❌ Car Race Monitor WebSocket error:", error);
-          setError("WebSocket connection error");
           setConnectionStatus('error');
-          setIsLoading(false);
         };
 
         socket.onclose = (event) => {
           if (!isComponentMounted.current) return;
           console.log("🔌 Car Race Monitor WebSocket closed:", event.code, event.reason);
           
+          if (pingIntervalRef) {
+            clearInterval(pingIntervalRef);
+            pingIntervalRef = null;
+          }
+          
           setConnectionStatus('disconnected');
           
-          if (event.code === 4001) {
-            setError("Authentication failed. Token required.");
-            return;
-          } else if (event.code === 4002) {
-            setError("Invalid or expired token. Please login again.");
-            return;
-          } else if (event.code === 4003) {
-            setError("Access denied. Admin privileges required.");
+          // Handle auth errors - don't reconnect
+          if (event.code === 4001 || event.code === 4002 || event.code === 4003) {
+            const authErrors = {
+              4001: "Authentication failed. Token required.",
+              4002: "Invalid or expired token. Please login again.",
+              4003: "Access denied. Admin privileges required."
+            };
+            setError(authErrors[event.code]);
             return;
           }
 
-          if (!error) {
-            setError("WebSocket connection closed. Reconnecting...");
-          }
+          // INFINITE RECONNECTION with exponential backoff (max 30 seconds)
+          reconnectAttempts++;
+          const delay = Math.min(1000 * Math.pow(1.5, Math.min(reconnectAttempts, 10)), 30000);
+          
+          setError(`Connection lost. Reconnecting in ${Math.round(delay/1000)}s... (attempt ${reconnectAttempts})`);
+          console.log(`🔄 Reconnecting Car Race monitor in ${delay}ms (attempt ${reconnectAttempts})`);
 
-          // Implement exponential backoff for reconnection
-          if (reconnectAttempts < maxReconnectAttempts) {
-            const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 10000);
-            console.log(`🔄 Reconnecting Car Race monitor in ${delay}ms (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})`);
-
-            reconnectTimeoutRef.current = setTimeout(() => {
-              if (isComponentMounted.current) {
-                reconnectAttempts++;
-                connect();
-              }
-            }, delay);
-          } else {
-            setError("Failed to reconnect after several attempts. Please reload the page.");
-          }
+          reconnectTimeoutRef.current = setTimeout(() => {
+            if (isComponentMounted.current) {
+              connect();
+            }
+          }, delay);
         };
 
       } catch (error) {
         if (isComponentMounted.current) {
           console.error("❌ Car Race Monitor WebSocket connection error:", error);
-          setError("Failed to establish WebSocket connection: " + error.message);
-          setIsLoading(false);
+          setConnectionStatus('error');
+          
+          reconnectAttempts++;
+          const delay = Math.min(2000 * Math.pow(1.5, Math.min(reconnectAttempts, 8)), 30000);
+          setError(`Connection failed. Retrying in ${Math.round(delay/1000)}s...`);
+          
+          reconnectTimeoutRef.current = setTimeout(() => {
+            if (isComponentMounted.current) {
+              connect();
+            }
+          }, delay);
         }
       }
     };
@@ -208,9 +222,18 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         clearTimeout(reconnectTimeoutRef.current);
       }
 
+      if (pingIntervalRef) {
+        clearInterval(pingIntervalRef);
+      }
+
       if (wsRef.current) {
-        wsRef.current.onclose = null;
-        wsRef.current.close();
+        try {
+          wsRef.current.onclose = null;
+          wsRef.current.onerror = null;
+          wsRef.current.close();
+        } catch (e) {
+          console.warn("Error during cleanup:", e);
+        }
       }
     };
   }, [websocketUrl]);
