@@ -428,11 +428,11 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
     //   icon: <StarIcon />,
     //   link: "/admin/top-performance",
     // },
-    {
-      text: "Api Transaction",
-      icon: <ReceiptLongIcon />,
-      link: "/admin/api-transaction",
-    },
+    // {
+    //   text: "Api Transaction",
+    //   icon: <ReceiptLongIcon />,
+    //   link: "/admin/api-transaction",
+    // },
     {
       text: "Deposits",
       icon: <RequestQuoteOutlinedIcon />,
@@ -517,11 +517,11 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
       //   icon: <MonetizationOnIcon />,
       //   link: "/admin/profit-loss",
       // },
-      {
-        text: "Api Transaction",
-        icon: <ReceiptLongIcon />,
-        link: "/admin/api-transaction",
-      },
+      // {
+      //   text: "Api Transaction",
+      //   icon: <ReceiptLongIcon />,
+      //   link: "/admin/api-transaction",
+      // },
       {
         text: "Deposits",
         icon: <RequestQuoteOutlinedIcon />,
