@@ -80,7 +80,7 @@ const FiveDBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
       const wsUrl = `${websocketUrl}?token=${accessToken}`;
 
       try {
-        console.log("🔌 Connecting to FiveD Bet Monitor WebSocket:", wsUrl);
+        //console.log("🔌 Connecting to FiveD Bet Monitor WebSocket:", wsUrl);
         setConnectionStatus("connecting");
         const socket = new WebSocket(wsUrl);
         wsRef.current = socket;
@@ -91,7 +91,7 @@ const FiveDBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
             return;
           }
 
-          console.log("✅ FiveD Bet Monitor WebSocket connected successfully");
+          //console.log("✅ FiveD Bet Monitor WebSocket connected successfully");
           setIsLoading(false);
           setError(null);
           setConnectionStatus("connected");
@@ -123,7 +123,7 @@ const FiveDBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
               setIsLoading(false);
               setError(null);
             } else if (data.status === "connected") {
-              console.log("✅ FiveD Bet Monitor connection confirmed:", data.message);
+              //console.log("✅ FiveD Bet Monitor connection confirmed:", data.message);
               setConnectionStatus("connected");
               setError(null);
             } else if (data.type === "pong") {
@@ -142,7 +142,7 @@ const FiveDBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
 
         socket.onclose = (event) => {
           if (!isComponentMounted.current) return;
-          console.log("🔌 FiveD Bet Monitor WebSocket closed:", event.code, event.reason);
+          //console.log("🔌 FiveD Bet Monitor WebSocket closed:", event.code, event.reason);
 
           if (pingIntervalRef) {
             clearInterval(pingIntervalRef);
@@ -167,7 +167,7 @@ const FiveDBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
           const delay = Math.min(1000 * Math.pow(1.5, Math.min(reconnectAttempts, 10)), 30000);
           
           setError(`Connection lost. Reconnecting in ${Math.round(delay/1000)}s... (attempt ${reconnectAttempts})`);
-          console.log(`🔄 Reconnecting FiveD bet monitor in ${delay}ms (attempt ${reconnectAttempts})`);
+          //console.log(`🔄 Reconnecting FiveD bet monitor in ${delay}ms (attempt ${reconnectAttempts})`);
 
           reconnectTimeoutRef.current = setTimeout(() => {
             if (isComponentMounted.current) {
@@ -226,14 +226,14 @@ const FiveDBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         period.timerType === selectedTimer && period.periodId === periodId
     );
 
-    console.log("🎯 Current FiveD period data:", period);
-    console.log(
-      "🔍 Looking for FiveD timer:",
-      selectedTimer,
-      "period:",
-      periodId
-    );
-    console.log("📊 Available FiveD periods:", monitorData.activePeriods);
+    //console.log("🎯 Current FiveD period data:", period);
+    //console.log(
+    //   "🔍 Looking for FiveD timer:",
+    //   selectedTimer,
+    //   "period:",
+    //   periodId
+    // );
+    //console.log("📊 Available FiveD periods:", monitorData.activePeriods);
 
     return period;
   };

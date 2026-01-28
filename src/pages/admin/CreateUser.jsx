@@ -301,10 +301,6 @@ const CreateUser = () => {
             newErrors.password = 'Password must be at least 8 characters long';
         }
 
-        if (!formData.accountType) {
-            newErrors.accountType = 'Please select an account type';
-        }
-
         // Validate that Client Demo is only available for ADMIN accounts
         if (formData.isClientDemo && formData.accountType !== AccountType.ADMIN) {
             newErrors.isClientDemo = 'Client Demo mode is only available for ADMIN account type';

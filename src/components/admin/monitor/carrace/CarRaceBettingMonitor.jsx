@@ -96,7 +96,7 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
       const wsUrl = `${websocketUrl}?token=${accessToken}`;
       
       try {
-        console.log("🔌 Connecting to Car Race Monitor WebSocket:", wsUrl);
+        //console.log("🔌 Connecting to Car Race Monitor WebSocket:", wsUrl);
         setConnectionStatus('connecting');
         const socket = new WebSocket(wsUrl);
         wsRef.current = socket;
@@ -107,7 +107,7 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
             return;
           }
           
-          console.log("✅ Car Race Monitor WebSocket connected successfully");
+          //console.log("✅ Car Race Monitor WebSocket connected successfully");
           setIsLoading(false);
           setError(null);
           setConnectionStatus('connected');
@@ -141,7 +141,7 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
               setError(null);
             }
             else if (data.status === "connected") {
-              console.log("✅ Car Race Monitor connection confirmed:", data.message);
+              //console.log("✅ Car Race Monitor connection confirmed:", data.message);
               setConnectionStatus('connected');
               setError(null);
             }
@@ -161,7 +161,7 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
 
         socket.onclose = (event) => {
           if (!isComponentMounted.current) return;
-          console.log("🔌 Car Race Monitor WebSocket closed:", event.code, event.reason);
+          //console.log("🔌 Car Race Monitor WebSocket closed:", event.code, event.reason);
           
           if (pingIntervalRef) {
             clearInterval(pingIntervalRef);
@@ -186,7 +186,7 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
           const delay = Math.min(1000 * Math.pow(1.5, Math.min(reconnectAttempts, 10)), 30000);
           
           setError(`Connection lost. Reconnecting in ${Math.round(delay/1000)}s... (attempt ${reconnectAttempts})`);
-          console.log(`🔄 Reconnecting Car Race monitor in ${delay}ms (attempt ${reconnectAttempts})`);
+          //console.log(`🔄 Reconnecting Car Race monitor in ${delay}ms (attempt ${reconnectAttempts})`);
 
           reconnectTimeoutRef.current = setTimeout(() => {
             if (isComponentMounted.current) {
@@ -246,9 +246,9 @@ const CarRaceBettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         period.timerType === selectedTimer && period.periodId === periodId
     );
     
-    console.log("🎯 Current Car Race period data:", period);
-    console.log("🔍 Looking for timer:", selectedTimer, "period:", periodId);
-    console.log("📊 Available periods:", monitorData.activePeriods);
+    //console.log("🎯 Current Car Race period data:", period);
+    //console.log("🔍 Looking for timer:", selectedTimer, "period:", periodId);
+    //console.log("📊 Available periods:", monitorData.activePeriods);
     
     return period;
   };

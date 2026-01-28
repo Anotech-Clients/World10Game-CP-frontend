@@ -76,7 +76,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
       const wsUrl = `${websocketUrl}?token=${accessToken}`;
       
       try {
-        console.log("🔌 Connecting to Bet Monitor WebSocket:", wsUrl);
+        //console.log("🔌 Connecting to Bet Monitor WebSocket:", wsUrl);
         setConnectionStatus('connecting');
         const socket = new WebSocket(wsUrl);
         wsRef.current = socket;
@@ -87,7 +87,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
             return;
           }
           
-          console.log("✅ Bet Monitor WebSocket connected successfully");
+          //console.log("✅ Bet Monitor WebSocket connected successfully");
           setIsLoading(false);
           setError(null);
           setConnectionStatus('connected');
@@ -122,7 +122,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
               setError(null); // Clear error on successful data
             }
             else if (data.status === "connected") {
-              console.log("✅ Bet Monitor connection confirmed:", data.message);
+              //console.log("✅ Bet Monitor connection confirmed:", data.message);
               setConnectionStatus('connected');
               setError(null);
             }
@@ -143,7 +143,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
 
         socket.onclose = (event) => {
           if (!isComponentMounted.current) return;
-          console.log("🔌 Bet Monitor WebSocket closed:", event.code, event.reason);
+          //console.log("🔌 Bet Monitor WebSocket closed:", event.code, event.reason);
           
           if (pingIntervalRef) {
             clearInterval(pingIntervalRef);
@@ -168,7 +168,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
           const delay = Math.min(1000 * Math.pow(1.5, Math.min(reconnectAttempts, 10)), 30000);
           
           setError(`Connection lost. Reconnecting in ${Math.round(delay/1000)}s... (attempt ${reconnectAttempts})`);
-          console.log(`🔄 Reconnecting bet monitor in ${delay}ms (attempt ${reconnectAttempts})`);
+          //console.log(`🔄 Reconnecting bet monitor in ${delay}ms (attempt ${reconnectAttempts})`);
 
           reconnectTimeoutRef.current = setTimeout(() => {
             if (isComponentMounted.current) {
@@ -229,9 +229,9 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         period.timerType === selectedTimer && period.periodId === periodId
     );
     
-    console.log("🎯 Current period data:", period);
-    console.log("🔍 Looking for timer:", selectedTimer, "period:", periodId);
-    console.log("📊 Available periods:", monitorData.activePeriods);
+    //console.log("🎯 Current period data:", period);
+    //console.log("🔍 Looking for timer:", selectedTimer, "period:", periodId);
+    //console.log("📊 Available periods:", monitorData.activePeriods);
     
     return period;
   };
