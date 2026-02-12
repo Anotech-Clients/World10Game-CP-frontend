@@ -54,6 +54,7 @@ const SubordinateData = () => {
   const [daysInMonth, setDaysInMonth] = useState(getDaysInMonth(2023, 1));
   const [subordinateDataSummary, setSubordinateDataSummary] = useState([]);
   const [filteredSummary, setFilteredSummary] = useState([]);
+  const [searchUid, setSearchUid] = useState("");
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -112,11 +113,12 @@ const SubordinateData = () => {
     setIsLoading(true);
 
     try {
+      const pageToSend = tabValue === 0 ? subPage : commPage;
       const [subordinateResponse, analysisResponse] = await Promise.all([
         axiosInstance.get(`${domain}/api/promotion/subordinate-details-data`, {
           params: {
             startDate: date,
-            page: subPage,
+            page: pageToSend,
             ...(selectedLevel === "All" ? {} : { level: selectedLevel }),
           },
           withCredentials: true,
@@ -158,13 +160,21 @@ const SubordinateData = () => {
     }
   };
 
-  useEffect(() => {
+useEffect(() => {
     if (tabValue === 0) {
-      fetchData(searchDate, subordinatePage, 1);
-    } else {
-      fetchData(searchDate, 1, commissionPage);
+      fetchData(searchDate, subordinatePage, commissionPage);
     }
-  }, [tabValue, subordinatePage, commissionPage]);
+  }, [subordinatePage]);
+
+  useEffect(() => {
+    if (tabValue === 1) {
+      fetchData(searchDate, subordinatePage, commissionPage);
+    }
+  }, [commissionPage]);
+
+  useEffect(() => {
+    fetchData(searchDate, subordinatePage, commissionPage);
+  }, [tabValue]);
 
   useEffect(() => {
     setSubordinatePage(1);
