@@ -79,24 +79,21 @@ const K3BetHistory = ({ selectedTimer, periodId, updateTrigger }) => {
     };
 
     return (
-        <Card sx={{
-            height: '100%',
-            backgroundColor: '#1e293b',
-            border: '1px solid rgba(148, 163, 184, 0.12)',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
-            borderRadius: '16px',
-            backdropFilter: 'blur(24px)',
-            transition: 'all 0.3s ease',
-            '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: '0 8px 32px rgba(99, 102, 241, 0.2)',
-                borderColor: 'rgba(99, 102, 241, 0.3)'
-            },
-        }}>
-            <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <History sx={{ mr: 1, color: '#6366f1' }} />
-                    <Typography variant="h6" sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+        <Card
+            elevation={0}
+            sx={{
+                width: '100%',
+                borderRadius: 1,
+                bgcolor: '#fff',
+                border: '1px solid',
+                borderColor: alpha(theme.palette.divider, 0.1),
+                // mt: 3
+            }}
+        >
+            <CardContent sx={{ p: 3 }}>
+                <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <History sx={{ color: theme.palette.primary.main, fontSize: 24 }} />
+                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
                         Game History
                     </Typography>
                 </Box>
@@ -119,32 +116,30 @@ const K3BetHistory = ({ selectedTimer, periodId, updateTrigger }) => {
                     </Paper>
                 ) : (
                     <>
-                        <TableContainer component={Paper} sx={{
-                            maxHeight: 400,
-                            backgroundColor: 'rgba(15, 23, 42, 0.5)',
-                            border: '1px solid rgba(148, 163, 184, 0.12)',
-                            borderRadius: '12px',
-                            '& .MuiTableCell-root': {
-                                color: '#f8fafc',
-                                borderColor: 'rgba(148, 163, 184, 0.12)',
-                                fontFamily: 'Inter, system-ui, sans-serif'
-                            },
-                            // Hide scrollbar but keep functionality
-                            '&::-webkit-scrollbar': {
-                                display: 'none'
-                            },
-                            '-ms-overflow-style': 'none',
-                            'scrollbar-width': 'none'
-                        }}>
+                        <TableContainer
+                            component={Paper}
+                            elevation={0}
+                            sx={{
+                                borderRadius: 1,
+                                mb: 2,
+                                overflow: 'auto', // Ensure the container can scroll
+                                '&::-webkit-scrollbar': {
+                                    display: 'none', // Hide the scrollbar for WebKit browsers (Chrome, Safari, etc.)
+                                },
+                                scrollbarWidth: 'none', // Hide the scrollbar for Firefox
+                                msOverflowStyle: 'none', // Hide the scrollbar for IE and Edge
+                            }}
+                        >
                             <Table sx={{ minWidth: 650 }}>
-                                <TableHead>
-                                    <TableRow sx={{ backgroundColor: 'rgba(15, 23, 42, 0.8)' }}>
-                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Period ID</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Dice Values</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Total Sum</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Odd/Even</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Big/Small</TableCell>
-                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Manual</TableCell>
+                                <TableHead sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 600 }}>Period ID</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Dice Values</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Total Sum</TableCell>
+                                        {/* <TableCell sx={{ fontWeight: 600 }}>Result Types</TableCell> */}
+                                        <TableCell sx={{ fontWeight: 600 }}>Odd/Even</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Big/Small</TableCell>
+                                        <TableCell sx={{ fontWeight: 600 }}>Manual</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

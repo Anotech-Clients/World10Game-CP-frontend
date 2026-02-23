@@ -32,6 +32,14 @@ const sizeOptions = [
   { value: "BIG", color: "#3b82f6" },
   { value: "SMALL", color: "#f97316" },
 ];
+const TIMER_MAP = {
+  ONE: "ONE_MINUTE_TIMER",
+  THREE: "THREE_MINUTE_TIMER",
+  FIVE: "FIVE_MINUTE_TIMER",
+  TEN: "TEN_MINUTE_TIMER",
+  THIRTY: "THIRTY_TIMER",
+};
+
 
 const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
   const theme = useTheme();
@@ -47,6 +55,11 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
   const reconnectTimeoutRef = useRef(null);
   const isComponentMounted = useRef(true);
   let pingIntervalRef = null;
+
+  const normalizedTimer = React.useMemo(() => {
+    return TIMER_MAP[selectedTimer] ?? selectedTimer;
+  }, [selectedTimer]);
+
 
   useEffect(() => {
     isComponentMounted.current = true;
@@ -74,7 +87,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
       }
 
       const wsUrl = `${websocketUrl}?token=${accessToken}`;
-      
+
       try {
         //console.log("🔌 Connecting to Bet Monitor WebSocket:", wsUrl);
         setConnectionStatus('connecting');
@@ -86,7 +99,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
             socket.close();
             return;
           }
-          
+
           //console.log("✅ Bet Monitor WebSocket connected successfully");
           setIsLoading(false);
           setError(null);
@@ -117,7 +130,7 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
             // Handle different message types from the unified WebSocket service
             if (data.type === "monitorUpdate" && data.data) {
               setMonitorData(data.data);
-              calculateGroupTotals(data.data);
+              // calculateGroupTotals(data.data);
               setIsLoading(false);
               setError(null); // Clear error on successful data
             }
@@ -144,14 +157,14 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         socket.onclose = (event) => {
           if (!isComponentMounted.current) return;
           //console.log("🔌 Bet Monitor WebSocket closed:", event.code, event.reason);
-          
+
           if (pingIntervalRef) {
             clearInterval(pingIntervalRef);
             pingIntervalRef = null;
           }
-          
+
           setConnectionStatus('disconnected');
-          
+
           // Handle auth errors - don't reconnect
           if (event.code === 4001 || event.code === 4002 || event.code === 4003) {
             const authErrors = {
@@ -166,8 +179,8 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
           // INFINITE RECONNECTION with exponential backoff (max 30 seconds)
           reconnectAttempts++;
           const delay = Math.min(1000 * Math.pow(1.5, Math.min(reconnectAttempts, 10)), 30000);
-          
-          setError(`Connection lost. Reconnecting in ${Math.round(delay/1000)}s... (attempt ${reconnectAttempts})`);
+
+          setError(`Connection lost. Reconnecting in ${Math.round(delay / 1000)}s... (attempt ${reconnectAttempts})`);
           //console.log(`🔄 Reconnecting bet monitor in ${delay}ms (attempt ${reconnectAttempts})`);
 
           reconnectTimeoutRef.current = setTimeout(() => {
@@ -181,12 +194,12 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         if (isComponentMounted.current) {
           console.error("❌ Bet Monitor WebSocket connection error:", error);
           setConnectionStatus('error');
-          
+
           // Retry connection after delay
           reconnectAttempts++;
           const delay = Math.min(2000 * Math.pow(1.5, Math.min(reconnectAttempts, 8)), 30000);
-          setError(`Connection failed. Retrying in ${Math.round(delay/1000)}s...`);
-          
+          setError(`Connection failed. Retrying in ${Math.round(delay / 1000)}s...`);
+
           reconnectTimeoutRef.current = setTimeout(() => {
             if (isComponentMounted.current) {
               connect();
@@ -219,48 +232,77 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
         }
       }
     };
-  }, [websocketUrl]);
+  }, [websocketUrl, selectedTimer, periodId]);
+
+  useEffect(() => {
+    if (monitorData) {
+      calculateGroupTotals(monitorData);
+    }
+  }, [monitorData, selectedTimer, periodId]);
+
 
   const getCurrentPeriodData = () => {
     if (!monitorData || !monitorData.activePeriods) return null;
-    
+
     const period = monitorData.activePeriods.find(
       (period) =>
         period.timerType === selectedTimer && period.periodId === periodId
     );
-    
+
     //console.log("🎯 Current period data:", period);
     //console.log("🔍 Looking for timer:", selectedTimer, "period:", periodId);
     //console.log("📊 Available periods:", monitorData.activePeriods);
-    
+
     return period;
   };
 
   const calculateGroupTotals = (data) => {
     const period = data.activePeriods?.find(
-      (p) => p.timerType === selectedTimer && p.periodId === periodId
+      p => p.timerType === normalizedTimer
     );
+
     if (!period) return;
 
     const smallTotal = smallNumbers.reduce(
       (sum, num) => sum + (period.betAmounts[num] || 0),
       0
     );
+
     const bigTotal = bigNumbers.reduce(
       (sum, num) => sum + (period.betAmounts[num] || 0),
       0
     );
 
-    setGroupTotals({
-      small: smallTotal,
-      big: bigTotal,
-    });
+    setGroupTotals({ small: smallTotal, big: bigTotal });
   };
 
-  const currentPeriod = getCurrentPeriodData();
-  const maxBetAmount = currentPeriod
-    ? Math.max(...Object.values(currentPeriod.betAmounts || {}))
-    : 0;
+
+  const currentPeriod = React.useMemo(() => {
+    if (!monitorData?.activePeriods) return null;
+
+    // 1️⃣ exact match
+    const exact = monitorData.activePeriods.find(
+      p =>
+        p.timerType === normalizedTimer &&
+        p.periodId === periodId
+    );
+
+    if (exact) return exact;
+
+    // 2️⃣ fallback → latest period for timer
+    const latest = monitorData.activePeriods
+      .filter(p => p.timerType === normalizedTimer)
+      .slice(-1)[0];
+
+    return latest || null;
+  }, [monitorData, normalizedTimer, periodId]);
+
+
+  const maxBetAmount = React.useMemo(() => {
+    if (!currentPeriod?.betAmounts) return 0;
+    return Math.max(0, ...Object.values(currentPeriod.betAmounts));
+  }, [currentPeriod]);
+
 
   const getBetPercentage = (amount) => {
     if (!maxBetAmount || !amount) return 0;
@@ -319,419 +361,418 @@ const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
       }}
     >
       <CardContent sx={{ p: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            {/* Header Section */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 2,
-              }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Users size={20} className="text-gray-600" />
-                <Typography variant="h6" sx={{ ml: 1, fontWeight: 600 }}>
-                  Active Users: {monitorData?.activeUsers || 0}
-                </Typography>
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <TrendingUp size={20} className="text-gray-600" />
-                <Chip
-                  label={`Total Bet Amount: ${
-                    currentPeriod?.totalBetAmount?.toLocaleString() || 0
-                  }`}
-                  color="primary"
-                  sx={{
-                    ml: 1,
-                    height: 28,
-                    fontWeight: 600,
-                    fontSize: "0.75rem",
-                  }}
-                />
-              </Box>
+        {/* <Grid container spacing={2}>
+          <Grid item xs={12}> */}
+        <Box>
+          {/* Header Section */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Users size={20} className="text-gray-600" />
+              <Typography variant="h6" sx={{ ml: 1, fontWeight: 600 }}>
+                Active Users: {monitorData?.activeUsers || 0}
+              </Typography>
             </Box>
-
-            {/* Connection Status */}
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <TrendingUp size={20} className="text-gray-600" />
               <Chip
-                label={`Status: ${connectionStatus} | Period: ${periodId}`}
-                color={connectionStatus === 'connected' ? 'success' : 'warning'}
-                size="small"
-                sx={{ fontSize: "0.75rem" }}
+                label={`Total Bet Amount: ${currentPeriod?.totalBetAmount?.toLocaleString() || 0
+                  }`}
+                color="primary"
+                sx={{
+                  ml: 1,
+                  height: 28,
+                  fontWeight: 600,
+                  fontSize: "0.75rem",
+                }}
               />
             </Box>
+          </Box>
 
-            {/* Size Options Section */}
-            <Grid container spacing={2} sx={{ mb: 2 }}>
-              {sizeOptions.map(({ value, color }) => {
-                const betAmount = currentPeriod?.betAmounts[value] || 0;
-                const percentage = getTotalPercentage(betAmount);
+          {/* Connection Status */}
+          <Box sx={{ mb: 2 }}>
+            <Chip
+              label={`Status: ${connectionStatus} | Period: ${periodId}`}
+              color={connectionStatus === 'connected' ? 'success' : 'warning'}
+              size="small"
+              sx={{ fontSize: "0.75rem" }}
+            />
+          </Box>
 
-                return (
-                  <Grid item xs={12} md={6} key={value}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        borderTop: `3px solid ${color}`,
-                        borderRadius: 1,
-                        height: "100%",
-                      }}
+          {/* Size Options Section */}
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            {sizeOptions.map(({ value, color }) => {
+              const betAmount = currentPeriod?.betAmounts[value] || 0;
+              const percentage = getTotalPercentage(betAmount);
+
+              return (
+                <Grid item xs={12} md={6} key={value}>
+                  <Paper
+                    sx={{
+                      p: 2,
+                      borderTop: `3px solid ${color}`,
+                      borderRadius: 1,
+                      height: "100%",
+                    }}
+                  >
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
                     >
                       <Box
-                        sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                        sx={{
+                          width: 12,
+                          height: 12,
+                          borderRadius: "50%",
+                          bgcolor: color,
+                          mr: 1,
+                        }}
+                      />
+                      <Typography
+                        sx={{ fontWeight: 600, fontSize: "0.875rem" }}
+                      >
+                        {value}
+                      </Typography>
+                    </Box>
+                    <Typography variant="h5" sx={{ mb: 1, fontWeight: 700 }}>
+                      {betAmount.toLocaleString()}
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          bgcolor: theme.palette.grey[100],
+                          borderRadius: 1,
+                          mr: 1,
+                          height: 6,
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
                       >
                         <Box
                           sx={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: "50%",
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            height: "100%",
                             bgcolor: color,
-                            mr: 1,
+                            width: `${percentage}%`,
+                            transition: "width 0.3s ease",
                           }}
                         />
-                        <Typography
-                          sx={{ fontWeight: 600, fontSize: "0.875rem" }}
-                        >
-                          {value}
-                        </Typography>
                       </Box>
-                      <Typography variant="h5" sx={{ mb: 1, fontWeight: 700 }}>
-                        {betAmount.toLocaleString()}
-                      </Typography>
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Box
-                          sx={{
-                            flexGrow: 1,
-                            bgcolor: theme.palette.grey[100],
-                            borderRadius: 1,
-                            mr: 1,
-                            height: 6,
-                            position: "relative",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <Box
-                            sx={{
-                              position: "absolute",
-                              left: 0,
-                              top: 0,
-                              height: "100%",
-                              bgcolor: color,
-                              width: `${percentage}%`,
-                              transition: "width 0.3s ease",
-                            }}
-                          />
-                        </Box>
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: theme.palette.text.secondary,
-                            fontSize: "0.75rem",
-                          }}
-                        >
-                          {percentage.toFixed(1)}%
-                        </Typography>
-                      </Box>
-                    </Paper>
-                  </Grid>
-                );
-              })}
-            </Grid>
-
-            <Grid container spacing={2} sx={{ mb: 2 }}>
-              {/* Small Numbers Table */}
-              <Grid item xs={12} md={6}>
-                <Paper
-                  sx={{
-                    borderRadius: 1,
-                    overflow: "hidden",
-                    boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-                    bgcolor: "primary.light",
-                    height: "100%",
-                  }}
-                >
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            sx={{
-                              fontWeight: 600,
-                              color: "white",
-                              fontSize: "0.875rem",
-                            }}
-                            colSpan={3}
-                          >
-                            Small Numbers (0-4)
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {smallNumbers.map((number) => {
-                          const betAmount =
-                            currentPeriod?.betAmounts[number] || 0;
-                          const percentage = getBetPercentage(betAmount);
-
-                          return (
-                            <TableRow
-                              key={number}
-                              sx={{ "&:hover": { bgcolor: "primary.dark" } }}
-                            >
-                              <TableCell
-                                sx={{ color: "white", fontSize: "0.875rem" }}
-                              >
-                                <Chip
-                                  label={number}
-                                  size="small"
-                                  sx={{
-                                    bgcolor: "rgba(255, 255, 255, 0.2)",
-                                    color: "white",
-                                    fontWeight: 600,
-                                    borderRadius: 1,
-                                    fontSize: "0.75rem",
-                                  }}
-                                />
-                              </TableCell>
-                              <TableCell
-                                sx={{ color: "white", fontSize: "0.875rem" }}
-                              >
-                                <Typography sx={{ fontWeight: 500 }}>
-                                  {betAmount.toLocaleString()}
-                                </Typography>
-                              </TableCell>
-                              <TableCell
-                                sx={{ color: "white", fontSize: "0.875rem" }}
-                              >
-                                <Box
-                                  sx={{ display: "flex", alignItems: "center" }}
-                                >
-                                  <Box
-                                    sx={{
-                                      flexGrow: 1,
-                                      bgcolor: "rgba(255, 255, 255, 0.1)",
-                                      borderRadius: 1,
-                                      mr: 1,
-                                      height: 6,
-                                      position: "relative",
-                                      overflow: "hidden",
-                                    }}
-                                  >
-                                    <Box
-                                      sx={{
-                                        position: "absolute",
-                                        left: 0,
-                                        top: 0,
-                                        height: "100%",
-                                        bgcolor: "rgba(255, 255, 255, 0.5)",
-                                        width: `${percentage}%`,
-                                        transition: "width 0.3s ease",
-                                      }}
-                                    />
-                                  </Box>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ fontSize: "0.75rem" }}
-                                  >
-                                    {percentage.toFixed(1)}%
-                                  </Typography>
-                                </Box>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Paper>
-              </Grid>
-
-              {/* Big Numbers Table */}
-              <Grid item xs={12} md={6}>
-                <Paper
-                  sx={{
-                    borderRadius: 1,
-                    overflow: "hidden",
-                    boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-                    bgcolor: "secondary.light",
-                    height: "100%",
-                  }}
-                >
-                  <TableContainer>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            sx={{
-                              fontWeight: 600,
-                              color: "white",
-                              fontSize: "0.875rem",
-                            }}
-                            colSpan={3}
-                          >
-                            Big Numbers (5-9)
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {bigNumbers.map((number) => {
-                          const betAmount =
-                            currentPeriod?.betAmounts[number] || 0;
-                          const percentage = getBetPercentage(betAmount);
-
-                          return (
-                            <TableRow
-                              key={number}
-                              sx={{ "&:hover": { bgcolor: "secondary.dark" } }}
-                            >
-                              <TableCell
-                                sx={{ color: "white", fontSize: "0.875rem" }}
-                              >
-                                <Chip
-                                  label={number}
-                                  size="small"
-                                  sx={{
-                                    bgcolor: "rgba(255, 255, 255, 0.2)",
-                                    color: "white",
-                                    fontWeight: 600,
-                                    borderRadius: 1,
-                                    fontSize: "0.75rem",
-                                  }}
-                                />
-                              </TableCell>
-                              <TableCell
-                                sx={{ color: "white", fontSize: "0.875rem" }}
-                              >
-                                <Typography sx={{ fontWeight: 500 }}>
-                                  {betAmount.toLocaleString()}
-                                </Typography>
-                              </TableCell>
-                              <TableCell
-                                sx={{ color: "white", fontSize: "0.875rem" }}
-                              >
-                                <Box
-                                  sx={{ display: "flex", alignItems: "center" }}
-                                >
-                                  <Box
-                                    sx={{
-                                      flexGrow: 1,
-                                      bgcolor: "rgba(255, 255, 255, 0.1)",
-                                      borderRadius: 1,
-                                      mr: 1,
-                                      height: 6,
-                                      position: "relative",
-                                      overflow: "hidden",
-                                    }}
-                                  >
-                                    <Box
-                                      sx={{
-                                        position: "absolute",
-                                        left: 0,
-                                        top: 0,
-                                        height: "100%",
-                                        bgcolor: "rgba(255, 255, 255, 0.5)",
-                                        width: `${percentage}%`,
-                                        transition: "width 0.3s ease",
-                                      }}
-                                    />
-                                  </Box>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ fontSize: "0.75rem" }}
-                                  >
-                                    {percentage.toFixed(1)}%
-                                  </Typography>
-                                </Box>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Paper>
-              </Grid>
-            </Grid>
-
-            {/* Color Cards */}
-            <Grid container spacing={2}>
-              {colorOptions.map(({ value, color }) => {
-                const betAmount = currentPeriod?.betAmounts[value] || 0;
-                const percentage = getTotalPercentage(betAmount);
-
-                return (
-                  <Grid item xs={12} md={4} key={value}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        borderTop: `3px solid ${color}`,
-                        borderRadius: 1,
-                        height: "100%",
-                      }}
-                    >
-                      <Box
-                        sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          fontSize: "0.75rem",
+                        }}
                       >
-                        <Box
-                          sx={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: "50%",
-                            bgcolor: color,
-                            mr: 1,
-                          }}
-                        />
-                        <Typography
-                          sx={{ fontWeight: 600, fontSize: "0.875rem" }}
-                        >
-                          {value}
-                        </Typography>
-                      </Box>
-                      <Typography variant="h5" sx={{ mb: 1, fontWeight: 700 }}>
-                        {betAmount.toLocaleString()}
+                        {percentage.toFixed(1)}%
                       </Typography>
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Box
+                    </Box>
+                  </Paper>
+                </Grid>
+              );
+            })}
+          </Grid>
+
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            {/* Small Numbers Table */}
+            <Grid item xs={12} md={6}>
+              <Paper
+                sx={{
+                  borderRadius: 1,
+                  overflow: "hidden",
+                  boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+                  bgcolor: "primary.light",
+                  height: "100%",
+                }}
+              >
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
                           sx={{
-                            flexGrow: 1,
-                            bgcolor: theme.palette.grey[100],
-                            borderRadius: 1,
-                            mr: 1,
-                            height: 6,
-                            position: "relative",
-                            overflow: "hidden",
+                            fontWeight: 600,
+                            color: "white",
+                            fontSize: "0.875rem",
                           }}
+                          colSpan={3}
                         >
-                          <Box
-                            sx={{
-                              position: "absolute",
-                              left: 0,
-                              top: 0,
-                              height: "100%",
-                              bgcolor: color,
-                              width: `${percentage}%`,
-                              transition: "width 0.3s ease",
-                            }}
-                          />
-                        </Box>
-                        <Typography
-                          variant="caption"
+                          Small Numbers (0-4)
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {smallNumbers.map((number) => {
+                        const betAmount =
+                          currentPeriod?.betAmounts[number] || 0;
+                        const percentage = getBetPercentage(betAmount);
+
+                        return (
+                          <TableRow
+                            key={number}
+                            sx={{ "&:hover": { bgcolor: "primary.dark" } }}
+                          >
+                            <TableCell
+                              sx={{ color: "white", fontSize: "0.875rem" }}
+                            >
+                              <Chip
+                                label={number}
+                                size="small"
+                                sx={{
+                                  bgcolor: "rgba(255, 255, 255, 0.2)",
+                                  color: "white",
+                                  fontWeight: 600,
+                                  borderRadius: 1,
+                                  fontSize: "0.75rem",
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell
+                              sx={{ color: "white", fontSize: "0.875rem" }}
+                            >
+                              <Typography sx={{ fontWeight: 500 }}>
+                                {betAmount.toLocaleString()}
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{ color: "white", fontSize: "0.875rem" }}
+                            >
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                <Box
+                                  sx={{
+                                    flexGrow: 1,
+                                    bgcolor: "rgba(255, 255, 255, 0.1)",
+                                    borderRadius: 1,
+                                    mr: 1,
+                                    height: 6,
+                                    position: "relative",
+                                    overflow: "hidden",
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      position: "absolute",
+                                      left: 0,
+                                      top: 0,
+                                      height: "100%",
+                                      bgcolor: "rgba(255, 255, 255, 0.5)",
+                                      width: `${percentage}%`,
+                                      transition: "width 0.3s ease",
+                                    }}
+                                  />
+                                </Box>
+                                <Typography
+                                  variant="caption"
+                                  sx={{ fontSize: "0.75rem" }}
+                                >
+                                  {percentage.toFixed(1)}%
+                                </Typography>
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Paper>
+            </Grid>
+
+            {/* Big Numbers Table */}
+            <Grid item xs={12} md={6}>
+              <Paper
+                sx={{
+                  borderRadius: 1,
+                  overflow: "hidden",
+                  boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
+                  bgcolor: "secondary.light",
+                  height: "100%",
+                }}
+              >
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
                           sx={{
-                            color: theme.palette.text.secondary,
-                            fontSize: "0.75rem",
+                            fontWeight: 600,
+                            color: "white",
+                            fontSize: "0.875rem",
                           }}
+                          colSpan={3}
                         >
-                          {percentage.toFixed(1)}%
-                        </Typography>
-                      </Box>
-                    </Paper>
-                  </Grid>
-                );
-              })}
+                          Big Numbers (5-9)
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {bigNumbers.map((number) => {
+                        const betAmount =
+                          currentPeriod?.betAmounts[number] || 0;
+                        const percentage = getBetPercentage(betAmount);
+
+                        return (
+                          <TableRow
+                            key={number}
+                            sx={{ "&:hover": { bgcolor: "secondary.dark" } }}
+                          >
+                            <TableCell
+                              sx={{ color: "white", fontSize: "0.875rem" }}
+                            >
+                              <Chip
+                                label={number}
+                                size="small"
+                                sx={{
+                                  bgcolor: "rgba(255, 255, 255, 0.2)",
+                                  color: "white",
+                                  fontWeight: 600,
+                                  borderRadius: 1,
+                                  fontSize: "0.75rem",
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell
+                              sx={{ color: "white", fontSize: "0.875rem" }}
+                            >
+                              <Typography sx={{ fontWeight: 500 }}>
+                                {betAmount.toLocaleString()}
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{ color: "white", fontSize: "0.875rem" }}
+                            >
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                <Box
+                                  sx={{
+                                    flexGrow: 1,
+                                    bgcolor: "rgba(255, 255, 255, 0.1)",
+                                    borderRadius: 1,
+                                    mr: 1,
+                                    height: 6,
+                                    position: "relative",
+                                    overflow: "hidden",
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      position: "absolute",
+                                      left: 0,
+                                      top: 0,
+                                      height: "100%",
+                                      bgcolor: "rgba(255, 255, 255, 0.5)",
+                                      width: `${percentage}%`,
+                                      transition: "width 0.3s ease",
+                                    }}
+                                  />
+                                </Box>
+                                <Typography
+                                  variant="caption"
+                                  sx={{ fontSize: "0.75rem" }}
+                                >
+                                  {percentage.toFixed(1)}%
+                                </Typography>
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Paper>
             </Grid>
           </Grid>
-        </Grid>
+
+          {/* Color Cards */}
+          <Grid container spacing={2}>
+            {colorOptions.map(({ value, color }) => {
+              const betAmount = currentPeriod?.betAmounts[value] || 0;
+              const percentage = getTotalPercentage(betAmount);
+
+              return (
+                <Grid item xs={12} md={4} key={value}>
+                  <Paper
+                    sx={{
+                      p: 2,
+                      borderTop: `3px solid ${color}`,
+                      borderRadius: 1,
+                      height: "100%",
+                    }}
+                  >
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                    >
+                      <Box
+                        sx={{
+                          width: 12,
+                          height: 12,
+                          borderRadius: "50%",
+                          bgcolor: color,
+                          mr: 1,
+                        }}
+                      />
+                      <Typography
+                        sx={{ fontWeight: 600, fontSize: "0.875rem" }}
+                      >
+                        {value}
+                      </Typography>
+                    </Box>
+                    <Typography variant="h5" sx={{ mb: 1, fontWeight: 700 }}>
+                      {betAmount.toLocaleString()}
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          bgcolor: theme.palette.grey[100],
+                          borderRadius: 1,
+                          mr: 1,
+                          height: 6,
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            height: "100%",
+                            bgcolor: color,
+                            width: `${percentage}%`,
+                            transition: "width 0.3s ease",
+                          }}
+                        />
+                      </Box>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          color: theme.palette.text.secondary,
+                          fontSize: "0.75rem",
+                        }}
+                      >
+                        {percentage.toFixed(1)}%
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Box>
       </CardContent>
     </Card>
   );

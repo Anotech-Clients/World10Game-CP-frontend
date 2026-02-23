@@ -40,9 +40,12 @@ const TimerMonitor = ({
   const reconnectTimeoutRef = useRef(null);
   const isComponentMounted = useRef(true);
   const pingIntervalRef = useRef(null);
+  const lastPeriodIdRef = useRef(null); // Track last periodId to prevent duplicate calls
 
   useEffect(() => {
     selectedTimerRef.current = selectedTimer;
+    // Reset lastPeriodIdRef when timer changes to allow fetch for new timer type
+    lastPeriodIdRef.current = null;
   }, [selectedTimer]);
 
   // Map selected timer value to timer type expected by server
@@ -72,14 +75,18 @@ const TimerMonitor = ({
           setIsLoading(false);
 
           // Find the timer that matches the selected timer type
-          const currentTimerType = getTimerType(selectedTimer);
+          const currentTimerType = getTimerType(selectedTimerRef.current);
           const currentTimer = data.data.find(
             (timer) => timer.timerType === currentTimerType,
           );
 
           if (currentTimer) {
             //console.log("✅ Found matching timer:", currentTimer);
-            onPeriodUpdate?.(currentTimer.periodId);
+            // Only call onPeriodUpdate if periodId actually changed
+            if (currentTimer.periodId !== lastPeriodIdRef.current) {
+              lastPeriodIdRef.current = currentTimer.periodId;
+              onPeriodUpdate?.(currentTimer.periodId);
+            }
           } else {
             console.error(
               "⚠️ No matching timer found for type:",
