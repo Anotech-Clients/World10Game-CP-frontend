@@ -32,28 +32,68 @@ import PaginationItem from "@mui/material/PaginationItem";
 const getDaysInMonth = (year, month) => {
   return Array.from(
     { length: new Date(year, month, 0).getDate() },
-    (_, i) => i + 1
+    (_, i) => i + 1,
   );
+};
+
+const toLocalDateString = (d) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
+
+const formatGameType = (commission) => {
+  if (commission.commissionType === "DEPOSIT") return "Deposit";
+  switch (commission.gameType) {
+    case "WINGO":
+      return "Wingo";
+    case "K3":
+      return "K3";
+    case "FIVED":
+      return "Fived";
+    case "CAR_RACE":
+      return "Car Race";
+    case "API_GAME":
+      return commission.apiGameName || "API Game";
+    case "NA":
+      return "Deposit";
+    default:
+      return commission.gameType || "—";
+  }
+};
+
+// Yesterday = 1 day ago (activity date; commission credited at 12:01 AM next day)
+const getDefaultActivityDate = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return toLocalDateString(d);
+};
+
+const getDefaultActivityDateObj = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d;
 };
 
 const SubordinateData = () => {
   const today = new Date();
+  const defaultDateObj = getDefaultActivityDateObj();
   const [tabValue, setTabValue] = useState(0);
-  const [dailyDeposits, setDailyDeposits] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchDate, setSearchDate] = useState("");
+  const [searchDate, setSearchDate] = useState(getDefaultActivityDate());
   const [user, setUser] = useState(null);
   const [commissionHistory, setCommissionHistory] = useState(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [levelDrawerOpen, setLevelDrawerOpen] = useState(false);
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth() + 1);
-  const [day, setDay] = useState(today.getDate() - 1);
+  const [year, setYear] = useState(defaultDateObj.getFullYear());
+  const [month, setMonth] = useState(defaultDateObj.getMonth() + 1);
+  const [day, setDay] = useState(defaultDateObj.getDate());
   const [selectedLevel, setSelectedLevel] = useState("All");
   const [searchLevel, setSearchLevel] = useState("All");
   const [daysInMonth, setDaysInMonth] = useState(getDaysInMonth(2023, 1));
-  const [subordinateDataSummary, setSubordinateDataSummary] = useState([]);
-  const [filteredSummary, setFilteredSummary] = useState([]);
+  // const [subordinateDataSummary, setSubordinateDataSummary] = useState([]);
+  // const [filteredSummary, setFilteredSummary] = useState([]);
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -65,7 +105,7 @@ const SubordinateData = () => {
     firstDepositCount: 0,
     firstDepositAmount: 0,
   });
-  const [subordinateTurnOver, setSubordinateTurnOver] = useState({});
+  // const [subordinateTurnOver, setSubordinateTurnOver] = useState({});
   const { axiosInstance } = useAuth();
 
   const [subordinatePage, setSubordinatePage] = useState(1);
@@ -74,37 +114,23 @@ const SubordinateData = () => {
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
-    itemsPerPage: 10
+    itemsPerPage: 10,
   });
   const [commissionPagination, setCommissionPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
-    itemsPerPage: 10
+    itemsPerPage: 10,
   });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const today = new Date();
-    today.setDate(today.getDate());
-    const formattedDate = today.toISOString().split("T")[0];
-    setSearchDate(formattedDate);
     setDaysInMonth(getDaysInMonth(year, month));
-
-    if (day > daysInMonth.length) {
-      setDay(daysInMonth[daysInMonth.length - 1]);
+    const maxDay = getDaysInMonth(year, month).length;
+    if (day > maxDay) {
+      setDay(maxDay);
     }
-  }, [year, month, day]);
-
-  const initializeDate = () => {
-    const today = new Date();
-    today.setDate(today.getDate() - 1);
-    const formattedDate = today.toISOString().split("T")[0];
-  };
-
-  useEffect(() => {
-    initializeDate();
-  }, []);
+  }, [year, month]);
 
   const fetchData = async (date, subPage = 1, commPage = 1) => {
     if (!date) return;
@@ -112,12 +138,17 @@ const SubordinateData = () => {
     setIsLoading(true);
 
     try {
-      const [subordinateResponse, analysisResponse] = await Promise.all([
+      const [subordinateResult, analysisResult] = await Promise.allSettled([
         axiosInstance.get(`${domain}/api/promotion/subordinate-details-data`, {
           params: {
             startDate: date,
-            page: subPage,
-            ...(selectedLevel === "All" ? {} : { level: selectedLevel }),
+            subordinatePage: subPage,
+            commissionPage: commPage,
+            _t: Date.now(),
+            ...(searchLevel !== "All" ? { level: searchLevel } : {}),
+            ...(searchTerm.trim()
+              ? { searchSubordinateUid: searchTerm.trim() }
+              : {}),
           },
           withCredentials: true,
         }),
@@ -125,33 +156,86 @@ const SubordinateData = () => {
           params: {
             timeFilter: "custom",
             customDate: date,
+            _t: Date.now(),
+            ...(searchLevel !== "All" ? { level: searchLevel } : {}),
           },
           withCredentials: true,
-        })
+        }),
       ]);
 
-      if (subordinateResponse.data.data) {
-        setUser(subordinateResponse.data.data.subordinates.data);
-        setCommissionHistory(subordinateResponse.data.data.commissionDetails.data);
-        setSubordinatePagination(subordinateResponse.data.data.subordinates.pagination);
-        setCommissionPagination(subordinateResponse.data.data.commissionDetails.pagination);
+      const subordinateResponse =
+        subordinateResult.status === "fulfilled"
+          ? subordinateResult.value
+          : null;
+      const analysisResponse =
+        analysisResult.status === "fulfilled" ? analysisResult.value : null;
+
+      if (subordinateResponse?.data?.data) {
+        setUser(subordinateResponse.data.data.subordinates?.data ?? []);
+        setCommissionHistory(
+          subordinateResponse.data.data.commissionDetails?.data ?? [],
+        );
+        setSubordinatePagination(
+          subordinateResponse.data.data.subordinates?.pagination ?? {
+            currentPage: 1,
+            totalPages: 1,
+            totalItems: 0,
+            itemsPerPage: 10,
+          },
+        );
+        setCommissionPagination(
+          subordinateResponse.data.data.commissionDetails?.pagination ?? {
+            currentPage: 1,
+            totalPages: 1,
+            totalItems: 0,
+            itemsPerPage: 10,
+          },
+        );
       }
 
-      if (analysisResponse.data.data) {
+      if (analysisResponse?.data?.data) {
         const data = analysisResponse.data.data;
+        // API returns level-specific data: Level 1 in direct*, Level 2-6 in indirect*, All = both
+        const depositNum =
+          (data.filteredDirectDeposits ?? 0) +
+          (data.filteredIndirectDeposits ?? 0);
+        const depositAmt =
+          (data.filteredDirectDepositAmount ?? 0) +
+          (data.filteredIndirectDepositAmount ?? 0);
+        const bettors =
+          (data.filteredDirectBettors ?? 0) +
+          (data.filteredIndirectBettors ?? 0);
+        const betAmt =
+          (data.filteredDirectBetAmount ?? 0) +
+          (data.filteredIndirectBetAmount ?? 0);
+        const firstDepCount =
+          (data.filteredDirectFirstDeposits ?? 0) +
+          (data.filteredIndirectFirstDeposits ?? 0);
+        const firstDepAmt =
+          (data.filteredDirectFirstDepositAmount ?? 0) +
+          (data.filteredIndirectFirstDepositAmount ?? 0);
         setSummaryStats({
-          depositNumber: data.filteredDirectDeposits + data.filteredIndirectDeposits,
-          depositAmount: data.filteredDirectDepositAmount + data.filteredIndirectDepositAmount,
-          bettorsCount: data.filteredDirectBettors + data.filteredIndirectBettors,
-          totalBetAmount: data.filteredDirectBetAmount + data.filteredIndirectBetAmount,
-          firstDepositCount: data.filteredDirectFirstDeposits + data.filteredIndirectFirstDeposits,
-          firstDepositAmount: data.totalIndirectFirstDepositAmount + data.totalDirectFirstDepositAmount,
+          depositNumber: depositNum,
+          depositAmount: depositAmt,
+          bettorsCount: bettors,
+          totalBetAmount: betAmt,
+          firstDepositCount: firstDepCount,
+          firstDepositAmount: firstDepAmt,
+        });
+      } else {
+        setSummaryStats({
+          depositNumber: 0,
+          depositAmount: 0,
+          bettorsCount: 0,
+          totalBetAmount: 0,
+          firstDepositCount: 0,
+          firstDepositAmount: 0,
         });
       }
     } catch (error) {
       console.error("Error fetching data:", {
         message: error.message,
-        response: error.response?.data
+        response: error.response?.data,
       });
     } finally {
       setIsLoading(false);
@@ -159,27 +243,29 @@ const SubordinateData = () => {
   };
 
   useEffect(() => {
-    if (tabValue === 0) {
-      fetchData(searchDate, subordinatePage, 1);
-    } else {
-      fetchData(searchDate, 1, commissionPage);
-    }
+    fetchData(searchDate, subordinatePage, commissionPage);
   }, [tabValue, subordinatePage, commissionPage]);
 
+  // Fetch only when date or CONFIRMED level changes (not when scrolling in tier picker)
   useEffect(() => {
     setSubordinatePage(1);
     setCommissionPage(1);
     fetchData(searchDate, 1, 1);
-  }, [searchDate, selectedLevel]);
+  }, [searchDate, searchLevel]);
+
+  // Search by UID: trigger fetch on button click or Enter (searchTerm not in deps to avoid fetch on every keystroke)
+  const handleSearch = () => {
+    setSubordinatePage(1);
+    setCommissionPage(1);
+    fetchData(searchDate, 1, 1);
+  };
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
   const handleDateChange = () => {
-    setSearchDate(
-      `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`
-    );
+    setSearchDate(toLocalDateString(new Date(year, month - 1, day)));
     setDatePickerOpen(false);
   };
 
@@ -232,7 +318,7 @@ const SubordinateData = () => {
   };
 
   return (
-    <div>
+    <>
       <Mobile>
         <Box
           display="flex"
@@ -389,7 +475,7 @@ const SubordinateData = () => {
                         <Typography
                           variant="h6"
                           fontWeight="bold"
-                           color="#ffffff"
+                          color="#ffffff"
                           sx={{ borderRight: "1px solid #626663" }}
                         >
                           {summaryStats.depositNumber}
@@ -399,7 +485,7 @@ const SubordinateData = () => {
                           sx={{
                             fontSize: "13px",
                             borderRight: "1px solid #626663",
-                            color:"#B3BEC1"
+                            color: "#B3BEC1"
                           }}
                         >
                           Deposit number
@@ -965,6 +1051,7 @@ const SubordinateData = () => {
           setYear={setYear}
           setMonth={setMonth}
           setDay={setDay}
+          maxDayOffset={-1}
         />
       </Drawer>
 
@@ -1004,7 +1091,7 @@ const SubordinateData = () => {
           ]}
         />
       </Drawer>
-    </div>
+    </>
   );
 };
 

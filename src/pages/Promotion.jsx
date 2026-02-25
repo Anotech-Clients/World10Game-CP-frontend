@@ -155,7 +155,7 @@ const Promotion = ({ children }) => {
   const navigate = useNavigate();
   const { axiosInstance } = useAuth();
   const { userData, getUserData } = useContext(UserContext);
-  const [logoLoading, setLogoLoading] = useState(true);
+
   // let inviteCode = "";
 
   // if (userData?.referralLink) {
@@ -176,32 +176,36 @@ const Promotion = ({ children }) => {
   // const [commission, setCommission] = useState(0);
   const [thisWeekCommission, setThisWeekCommission] = useState(0);
   const [yesterdayCommission, setYesterdayCommission] = useState(0);
-
+  const [logoLoading, setLogoLoading] = useState(true); // Loading state
   useEffect(() => {
     getUserData();
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLogoLoading(false); // Hide loading after 2 seconds
-    }, 1000);
-
-    return () => clearTimeout(timer); // Cleanup
-  }, []);
-  useEffect(() => {
     const fetchLifetimeCommission = async () => {
       try {
-        const response = await axiosInstance.get(`${domain}/api/promotion/commissions`, {
-          withCredentials: true,
-        })
+        const response = await axiosInstance.get(
+          `${domain}/api/promotion/commissions?_t=${Date.now()}`,
+          {
+            withCredentials: true,
+          },
+        );
 
-        const summary = response.data?.data?.summary || {}
+        const summary = response.data?.data?.summary || {};
 
-        let lifetimeCommissionData = (summary.totalCommissionAmount || 0).toFixed(2)
-        let thisWeekCommissionData = (summary.thisWeekCommissionAmount || 0).toFixed(2)
-        let yesterdayCommissionData = (summary.todayCommissionAmount || 0).toFixed(2)
+        let lifetimeCommissionData = (
+          summary.totalCommissionAmount || 0
+        ).toFixed(2);
+        let thisWeekCommissionData = (
+          summary.thisWeekCommissionAmount || 0
+        ).toFixed(2);
+        let yesterdayCommissionData = (
+          summary.yesterdayCommissionAmount ??
+          summary.todayCommissionAmount ??
+          0
+        ).toFixed(2);
 
-        setYesterdayCommission(parseFloat(yesterdayCommissionData)); // Since yesterday's data is not available in the new API
+        setYesterdayCommission(parseFloat(yesterdayCommissionData)); // Commission for yesterday's transactions (credited today)
         setThisWeekCommission(parseFloat(thisWeekCommissionData));
         setLifetimeCommission(parseFloat(lifetimeCommissionData));
       } catch (err) {
@@ -210,35 +214,39 @@ const Promotion = ({ children }) => {
         setThisWeekCommission(0);
         setYesterdayCommission(0);
       }
-    }
+    };
 
-    fetchLifetimeCommission()
-  }, [])
+    fetchLifetimeCommission();
+  }, []);
 
-  const [subordinate, setSubordinates] = useState(0)
+  const [subordinate, setSubordinates] = useState(0);
 
   useEffect(() => {
     const fetchSubordinateData = async () => {
       try {
+        // timeFilter=yesterday = server's (CURRENT_DATE - 1) = activity date that generated "Yesterday's commission"
         const response = await axiosInstance.get(
-          `${domain}/api/subordinate/analysis?timeFilter=yesterday`,
+          `${domain}/api/subordinate/analysis?timeFilter=yesterday&_t=${Date.now()}`,
           {
             withCredentials: true,
-          }
-        )
-        //console.log(response.data.data)
-        setSubordinates(response.data.data)
-        setTotalDirectSubordinates(response.data.data?.thisWeekDirectSubordinates
-          || 0)
-        setTotalAllSubordinates(response.data.data?.totalDirectSubordinates + response.data.data?.totalIndirectSubordinates || 0)
+          },
+        );
+        setSubordinates(response.data.data);
+        setTotalDirectSubordinates(
+          response.data.data?.filteredDirectSubordinates ?? 0,
+        );
+        setTotalAllSubordinates(
+          (response.data.data?.filteredDirectSubordinates ?? 0) +
+          (response.data.data?.filteredIndirectSubordinates ?? 0),
+        );
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
-    }
-    fetchSubordinateData()
-  }, [])
+    };
+    fetchSubordinateData();
+  }, []);
 
-  const [totalCommission, SetTotalCommission] = useState(0)
+  const [totalCommission, SetTotalCommission] = useState(0);
 
   const handleCopyLink = async () => {
     navigate("/promotion/invite-link");
@@ -246,7 +254,7 @@ const Promotion = ({ children }) => {
 
   const dataItems = [
     {
-      heading: "number of registers ",
+      heading: "number of register",
       value: subordinate?.filteredDirectSubordinates || 0,
     },
     {
@@ -262,7 +270,7 @@ const Promotion = ({ children }) => {
       value: subordinate?.filteredDirectFirstDeposits || 0,
     },
     {
-      heading: "number of registers ",
+      heading: "number of register",
       value: subordinate?.filteredIndirectSubordinates || 0,
     },
     {
@@ -280,7 +288,7 @@ const Promotion = ({ children }) => {
   ];
 
   const data = [
-    { heading: "This week", value: thisWeekCommission || 0 },
+    { heading: "This Week", value: thisWeekCommission || 0 },
     { heading: "Total commission", value: lifetimeCommission || 0 },
     { heading: "direct subordinate", value: totalDirectSubordinates || 0 },
     {
@@ -289,11 +297,11 @@ const Promotion = ({ children }) => {
     },
     {
       heading: "First Deposits Direct",
-      value: subordinate?.firstDepositsDirect || 0,
+      value: subordinate?.filteredDirectFirstDeposits ?? 0,
     },
     {
       heading: "First Deposits Team",
-      value: subordinate?.firstDepositsTeam || 0,
+      value: subordinate?.filteredIndirectFirstDeposits ?? 0,
     },
   ];
 
@@ -309,16 +317,22 @@ const Promotion = ({ children }) => {
       setAlertMsg(""); // Clear the message
     }, 3000);
   };
-
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
-    setOpenSnackbar(false);
-    setAlertMsg(""); // Clear the message
+    setIsPopupVisible(false);
+    setPopupMessage(""); // Clear the message
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLogoLoading(false); // Hide loading after 2 seconds
+    }, 1000);
+
+    return () => clearTimeout(timer); // Cleanup
+  }, []);
   const handleOptionClick = (option) => {
     //console.log("option", option);
 
@@ -349,8 +363,8 @@ const Promotion = ({ children }) => {
         navigate("/promotion/subordinate-data");
         break;
 
-      // case "Partner Rewards":
-      //   // navigate("/promotion/subordinate-data");
+      // case "Partner rewards":
+      //   navigate("/promotion/new-subordinate");
       //   break;
 
       case "Commission detail":
@@ -364,10 +378,6 @@ const Promotion = ({ children }) => {
       case "Agent line customer service":
         navigate("/customer-service");
         break;
-
-      // case "New Subordinates":
-      //   navigate("/promotion/new-subordinate");
-      //   break;
 
       case "Rebate ratio":
         navigate("/activity/betting-rebate");

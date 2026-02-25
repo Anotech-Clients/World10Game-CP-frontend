@@ -1,17 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useState, useRef, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 
 const VerticalPicker = ({ initialValue, onChange, options }) => {
-  const [selectedIndex, setSelectedIndex] = useState(options.indexOf(initialValue));
+  const [selectedIndex, setSelectedIndex] = useState(
+    options.indexOf(initialValue),
+  );
   const containerRef = useRef(null);
-  const itemHeight = 40; // Height of each item in pixels
+  const itemHeight = 40;
 
   useEffect(() => {
     const handleScroll = () => {
       if (containerRef.current) {
         const scrollTop = containerRef.current.scrollTop;
         const newIndex = Math.round(scrollTop / itemHeight);
-        if (newIndex >= 1 && newIndex < options.length && newIndex !== selectedIndex) {
+        if (
+          newIndex >= 1 &&
+          newIndex < options.length &&
+          newIndex !== selectedIndex
+        ) {
           setSelectedIndex(newIndex);
           onChange(options[newIndex]);
         }
@@ -20,8 +26,8 @@ const VerticalPicker = ({ initialValue, onChange, options }) => {
 
     const container = containerRef.current;
     if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
     }
   }, [selectedIndex, onChange, options]);
 
