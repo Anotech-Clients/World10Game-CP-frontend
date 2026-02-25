@@ -138,6 +138,7 @@ const SubordinateData = () => {
     setIsLoading(true);
 
     try {
+      const pageToSend = tabValue === 0 ? subPage : commPage;
       const [subordinateResult, analysisResult] = await Promise.allSettled([
         axiosInstance.get(`${domain}/api/promotion/subordinate-details-data`, {
           params: {

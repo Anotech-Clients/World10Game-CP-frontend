@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }) => {
 
 📞 CONTACT FOR UPGRADE:
    Phone: +91 7029934287 (IND)
-   Email: info@100Winsolutions.com
+   Email: info@DreamClubsolutions.com
 
 🚀 UPGRADE BENEFITS:
    ✅ Full Admin Access
@@ -273,16 +273,33 @@ Ready to upgrade? Contact us today!`;
       throw error;
     }
   };
-  
+
   const isTokenExpired = (token) => {
     if (!token) return true;
     try {
       const decodedToken = jwtDecode(token);
       const expirationDate = new Date(decodedToken.exp * 1000);
+      // Check if token expires within 60 seconds (1 minute buffer)
       return expirationDate.getTime() - 60000 < new Date().getTime();
     } catch {
       return true;
     }
+  };
+
+  // Get appropriate error message based on error code
+  const getErrorMessage = (errorCode, defaultMessage) => {
+    const errorMessages = {
+      'TOKEN_EXPIRED': 'Your session has expired. Please wait while we refresh...',
+      'TOKEN_INVALID': 'Invalid session. Please login again.',
+      'TOKEN_REQUIRED': 'Authentication required. Please login.',
+      'SESSION_INVALID': 'Your session has ended. Please login again.',
+      'SESSION_EXPIRED': 'Your session has expired. Please login again.',
+      'SESSION_REPLACED': 'Your account has been logged in from another device.',
+      'REFRESH_TOKEN_EXPIRED': 'Your session has expired. Please login again.',
+      'REFRESH_TOKEN_INVALID': 'Session invalid. Please login again.',
+      'AUTH_ERROR': 'Authentication error. Please try again.',
+    };
+    return errorMessages[errorCode] || defaultMessage || 'An error occurred. Please try again.';
   };
 
   const validateSession = async () => {
@@ -290,40 +307,64 @@ Ready to upgrade? Contact us today!`;
       const response = await axiosInstance.get("/api/user/validate-session");
       
       if (!response.data.success) {
-        setLoginMessage("Your account has been logged in from another device. Please login again.");
-        await logout(true);
-        navigate("/login", { replace: true });
-        return false;
+        // Only logout if explicitly told session is invalid (forcedLogout flag)
+        if (response.data.forcedLogout) {
+          setLoginMessage(getErrorMessage(response.data.errorCode, "Your session has ended."));
+          await logout(true);
+          navigate("/login", { replace: true });
+          return false;
+        }
+        // For other failures, don't logout - just return true to keep user logged in
+        console.warn("Session validation returned unsuccessful but no forcedLogout flag");
+        return true;
       }
       
       setLoginMessage("");
       return true;
     } catch (error) {
+      // ONLY logout if server explicitly says forcedLogout
       if (error.response?.data?.forcedLogout) {
-        setLoginMessage("Your account has been logged in from another device. Please login again.");
+        setLoginMessage(getErrorMessage(error.response?.data?.errorCode, "Your session has ended."));
         await logout(true);
         navigate("/login", { replace: true });
         return false;
       }
-      console.error("Session validation error:", error);
-      return false;
+      
+      // For network errors or other issues, DON'T logout the user
+      // This prevents unnecessary logouts due to temporary network issues
+      console.error("Session validation error (keeping user logged in):", error);
+      return true; // Keep user logged in on network errors
     }
   };
-  
+
   axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
+      const errorCode = error.response?.data?.errorCode;
+      const forcedLogout = error.response?.data?.forcedLogout;
   
-      if (error.response?.data?.forcedLogout) {
-        setLoginMessage("Your account has been logged in from another device. Please login again.");
+      // CRITICAL: Only force logout when server explicitly says so
+      if (forcedLogout) {
+        const message = getErrorMessage(errorCode, error.response?.data?.message);
+        setLoginMessage(message);
         await logout(true);
         navigate("/login", { replace: true });
         return Promise.reject(error);
       }
       
+      // Handle 401 errors - attempt token refresh
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
+        
+        // Don't try to refresh if the error indicates invalid/corrupted token
+        if (errorCode === 'TOKEN_INVALID' || errorCode === 'REFRESH_TOKEN_INVALID') {
+          console.error("Token is invalid, cannot refresh:", errorCode);
+          setLoginMessage(getErrorMessage(errorCode));
+          await logout(true);
+          navigate("/login", { replace: true });
+          return Promise.reject(error);
+        }
   
         try {
           const newAccessToken = await refreshAccessToken();
@@ -331,9 +372,19 @@ Ready to upgrade? Contact us today!`;
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
-          console.error("Token refresh failed during interceptor:", refreshError);
-          await logout();
-          navigate("/login", { replace: true });
+          const refreshErrorCode = refreshError.response?.data?.errorCode;
+          const refreshForcedLogout = refreshError.response?.data?.forcedLogout;
+          
+          // Only logout if refresh explicitly failed with forced logout
+          if (refreshForcedLogout || refreshErrorCode === 'SESSION_EXPIRED' || refreshErrorCode === 'SESSION_INVALID') {
+            console.error("Token refresh failed - session invalid:", refreshErrorCode);
+            setLoginMessage(getErrorMessage(refreshErrorCode, "Session expired. Please login again."));
+            await logout(true);
+            navigate("/login", { replace: true });
+          } else {
+            // For network errors during refresh, don't logout immediately
+            console.error("Token refresh failed (network issue?):", refreshError);
+          }
           return Promise.reject(refreshError);
         }
       }
@@ -341,7 +392,7 @@ Ready to upgrade? Contact us today!`;
       return Promise.reject(error);
     }
   );
-  
+
   const checkAuthStatus = async () => {
     try {
       if (location.pathname === '/forgot-password' || location.pathname === '/customer-telegram' || location.pathname === '/tms/change-password') {
@@ -350,11 +401,39 @@ Ready to upgrade? Contact us today!`;
       }
   
       const accessToken = sessionStorage.getItem("accessToken");
-      if (!accessToken || isTokenExpired(accessToken)) {
-        await logout();
+      const refreshTokenStored = localStorage.getItem("refreshToken");
+      
+      // If no tokens at all, user is not logged in
+      if (!refreshTokenStored) {
+        setIsAuthenticated(false);
+        setIsLoading(false);
         return;
       }
+      
+      // If access token is missing or expired, try to refresh it
+      if (!accessToken || isTokenExpired(accessToken)) {
+        try {
+          console.log("[AUTH] Access token expired/missing, attempting refresh...");
+          await refreshAccessToken();
+          console.log("[AUTH] Token refreshed successfully");
+        } catch (refreshError) {
+          // Only logout if refresh explicitly failed due to invalid session
+          const errorCode = refreshError.response?.data?.errorCode;
+          const forcedLogout = refreshError.response?.data?.forcedLogout;
+          
+          if (forcedLogout || errorCode === 'SESSION_EXPIRED' || errorCode === 'SESSION_INVALID') {
+            console.error("[AUTH] Refresh failed - session invalid:", errorCode);
+            setLoginMessage(getErrorMessage(errorCode, "Session expired. Please login again."));
+            await logout(true);
+            return;
+          }
+          
+          // For network errors, keep user logged in with stale token
+          console.warn("[AUTH] Refresh failed (network issue?), keeping user logged in");
+        }
+      }
   
+      // Validate session only if we have valid tokens
       const isValid = await validateSession();
       if (!isValid) {
         return;
@@ -366,14 +445,21 @@ Ready to upgrade? Contact us today!`;
       setIsDemoAdmin(localStorage.getItem("demoAdmin") === "true");
     } catch (error) {
       console.error("Authentication check failed:", error);
-      await logout();
+      // Don't logout on generic errors - only on explicit session invalidation
+      const errorCode = error.response?.data?.errorCode;
+      const forcedLogout = error.response?.data?.forcedLogout;
+      
+      if (forcedLogout) {
+        setLoginMessage(getErrorMessage(errorCode));
+        await logout(true);
+      }
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
-    if (location.pathname !== "/register" && location.pathname !== "/login" && location.pathname !== "/" && location.pathname !== "/forgot-password" && location.pathname !== "/customer-telegram" && location.pathname !== "/tms/change-password") {
+    if (location.pathname !== "/register" && location.pathname !== "/forgot-password" && location.pathname !== "/customer-telegram" && location.pathname !== "/tms/change-password") {
       checkAuthStatus();
     } else {
       setIsLoading(false);
@@ -434,7 +520,7 @@ Ready to upgrade? Contact us today!`;
       setIsDemoAdmin(false);
       
       if (!silent) {
-        navigate("/", { replace: true });
+        navigate("/login", { replace: true });
       }
     }
   };

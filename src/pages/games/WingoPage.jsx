@@ -793,7 +793,7 @@ const WingoPage = ({ timerKey }) => {
     } else if (popupresult === 5) {
       color = "green/violet";
     }
-    size = popupresult > 5 ? "big" : "small";
+    size = popupresult >= 5 ? "big" : "small";
     return { color, number: popupresult, size }; // Return an object
   };
 
