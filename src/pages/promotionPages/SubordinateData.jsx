@@ -386,6 +386,7 @@ const SubordinateData = () => {
                   <input
                     value={searchTerm}
                     onChange={(event) => setSearchTerm(event.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                     placeholder="Search subordinate UID"
                     style={{
                       flexGrow: 1,
@@ -398,7 +399,7 @@ const SubordinateData = () => {
                     }}
                   />
                   <IconButton
-                    onClick={() => { }}
+                    onClick={handleSearch}
                     sx={{
                       background: "#24ee89",
                       padding: "0px 16px",
@@ -416,7 +417,12 @@ const SubordinateData = () => {
               <Grid item xs={12} sx={{ display: "flex", gap: 2, mb: 2 }}>
                 <Button
                   variant="outlined"
-                  onClick={() => setLevelDrawerOpen(true)}
+                  onClick={() => {
+                    setSelectedLevel(
+                      searchLevel === "All" ? "All" : searchLevel.toString(),
+                    );
+                    setLevelDrawerOpen(true);
+                  }}
                   sx={{
                     width: "48%",
                     height: "2.8rem",
