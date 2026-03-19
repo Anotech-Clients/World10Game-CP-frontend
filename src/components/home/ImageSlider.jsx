@@ -12,7 +12,7 @@ const images = [
   {
     key: "agent",
     fallback: "/assets/Banner/agent-2.webp",
-    txt: "Welcome to our 100Win Solutions our customer service never sends a link to the member.",
+    txt: "Welcome to our World 10 Game our customer service never sends a link to the member.",
   },
   {
      key: "attendance",

@@ -83,7 +83,7 @@ const HomeMain = ({ children }) => {
               zIndex: 9999,
             }}
           >
-            <LoadingLogo websiteName="100Win Solutions" />
+            <LoadingLogo websiteName="World 10 Game" />
           </div>
         )}
         <Box flexGrow={1}>
@@ -263,7 +263,8 @@ const HomeMain = ({ children }) => {
                     }}
                   >
                     <IconButton sx={{ p: 0.5 }}
-                      onClick={() => navigate("/account/notification")}>
+                      // onClick={() => navigate("/account/notification")}
+                      >
                       <Bell style={{ color: "white" }} />
                     </IconButton>
                   </Badge>

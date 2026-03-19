@@ -396,14 +396,14 @@ const lotteryItems = [
         description1: "Big/Small/Odd/Even",
         path: "/5d",
     },
-    {
-        id: 4,
-        name: "Car Race",
-        image: "/assets/lottery/car.webp",
-        description: "Guess Number",
-        description1: "Green/Red/Violet to win",
-        path: "/car-race",
-    },
+    // {
+    //     id: 4,
+    //     name: "Car Race",
+    //     image: "/assets/lottery/car.webp",
+    //     description: "Guess Number",
+    //     description1: "Green/Red/Violet to win",
+    //     path: "/car-race",
+    // },
 ]
 
 const categories = [

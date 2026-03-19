@@ -36,12 +36,12 @@ const Lottery = () => {
       game: "5d",
       path: "/5d",
     },
-    {
-      id: 4,
-      imgSrc: "/assets/lottery/car.webp",
-      game: "5d",
-      path: "/car-race",
-    },
+    // {
+    //   id: 4,
+    //   imgSrc: "/assets/lottery/car.webp",
+    //   game: "5d",
+    //   path: "/car-race",
+    // },
   ];
 
   useEffect(() => {

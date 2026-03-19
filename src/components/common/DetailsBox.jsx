@@ -38,8 +38,8 @@ const DetailsBox = () => {
   const [index, setIndex] = useState(0);
 
   const textArray = [
-    "Welcome to the 100Win Solutions! Greetings, Gamers and Enthusiasts!",
-    "The 100Win Solutions are here to provide excitement and fun.",
+    "Welcome to the World 10 Game! Greetings, Gamers and Enthusiasts!",
+    "The World 10 Game are here to provide excitement and fun.",
     "For your convenience and account safety, please ensure",
     "you fill in the genuine mobile number registered with your bank.",
     "Thank you for your cooperation and enjoy the games!",

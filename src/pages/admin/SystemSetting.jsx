@@ -263,13 +263,13 @@ const others = [
   //   link: "/admin/top-performance",
   //   color: "#FF9800"
   // },
-  {
-    icon: RequestQuoteIcon,
-    title: "Api Transaction",
-    description: "Monitor third-party API integrations and transactions. Track API call volumes, success rates, and data exchange history.",
-    link: "/admin/api-transaction",
-    color: "#9C27B0"
-  },
+  // {
+  //   icon: RequestQuoteIcon,
+  //   title: "Api Transaction",
+  //   description: "Monitor third-party API integrations and transactions. Track API call volumes, success rates, and data exchange history.",
+  //   link: "/admin/api-transaction",
+  //   color: "#9C27B0"
+  // },
   {
     icon: MilitaryTechIcon,
     title: "VIP Level",

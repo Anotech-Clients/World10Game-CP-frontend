@@ -776,6 +776,7 @@ const AdminSettings = () => {
                 <Button
                   variant="contained"
                   startIcon={showUpiForm ? <CancelIcon /> : <AddIcon />}
+                  disabled={!showUpiForm && upiList.length >= 1}
                   onClick={() => {
                     if (showUpiForm) {
                       resetUpiForm();
@@ -996,6 +997,7 @@ const AdminSettings = () => {
                 <Button
                   variant="contained"
                   startIcon={showTrxForm ? <CancelIcon /> : <AddIcon />}
+                    disabled={!showTrxForm && trxList.length >= 1}
                   onClick={() => {
                     if (showTrxForm) {
                       resetTrxForm();

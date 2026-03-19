@@ -109,7 +109,7 @@ const NotificationModal = ({ open, onClose }) => {
             variant="body1"
             sx={{ fontWeight: "800", textAlign: "center", mb: 2, fontSize: "16px", color: "#ffffff",mt:1.5 }}
           >
-            ✅ <span style={{ color: "#FF9C00" }}>WELCOME TO 100Win</span> ✅
+            ✅ <span style={{ color: "#FF9C00" }}>WELCOME TO World 10 Game</span> ✅
             CLAIM <span style={{ color: "#FF9C00" }}>1%</span> BUY AND SELL ARB TOKEN ON <span style={{ color: "#FF9C00" }}>AR WALLET</span><br />【 <span style={{ color: "#FF9C00" }}>MORE</span> 】
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: "800", textAlign: "center", mb: 2, fontSize: "16px", color: "#ffffff" }}>
@@ -131,10 +131,10 @@ const NotificationModal = ({ open, onClose }) => {
             <span style={{ color: "#FF9C00" }}>1000</span> winners share ₹<span style={{ color: "#FF9C00" }}>1,000,000 </span>prize pool!
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: "800", textAlign: "center", mb: 2, fontSize: "16px", color: "#ffffff" }}>
-            ✅ 100Win Customer Services【<span style={{ color: "#FF9C00" }}>Telegram </span>】✅
+            ✅ World 10 Game Customer Services【<span style={{ color: "#FF9C00" }}>Telegram </span>】✅
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: "800", textAlign: "center", mb: 2, fontSize: "16px", color: "#ffffff" }}>
-            🛡️ Verify True 100Win Site <br />【<span style={{ color: "#FF9C00" }}>GO </span>】🛡️
+            🛡️ Verify True World 10 Game Site <br />【<span style={{ color: "#FF9C00" }}>GO </span>】🛡️
           </Typography>
           <Typography variant="body1" sx={{ fontWeight: "800", textAlign: "center", mb: 2, fontSize: "16px", color: "#ffffff" }}>
             ❌Never Send Money To Anyone Claiming To Be An Agent❌

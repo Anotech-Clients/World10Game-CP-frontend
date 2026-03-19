@@ -9,7 +9,7 @@ export const rules = [
 export const rules2 = [
    "The commission percentage depends on the membership level, The higher the membership level, the higher the bonus percentage. Different game types also have different payout percentages. ",
     "TOP20 commission rankings will be randomly awarded with  a separate bonus",
-    "The final interpretation of this activity belongs to 100Win Solutions"
+    "The final interpretation of this activity belongs to World 10 Game"
   ];
 
   export const rulesdata = [

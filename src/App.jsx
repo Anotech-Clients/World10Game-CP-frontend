@@ -337,7 +337,7 @@ function AppContent() {
             element={<PasswordChange />}
           />
           <Route path="/account/feedback" element={<Feedback />} />
-          <Route path="/account/notification" element={<Notification />} />
+          {/* <Route path="/account/notification" element={<Notification />} /> */}
           <Route path="/account/game-statistic" element={<GameStatistic />} />
           <Route path="/account/language" element={<Language />} />
           <Route path="/account/message" element={<Message />} />
@@ -369,7 +369,7 @@ function AppContent() {
           <Route path="/timer" element={<WingoPage />} />
           <Route path="/k3" element={<K3Page />} />
           <Route path="/5d" element={<FiveDPage />} />
-          <Route path="/car-race" element={<CarRacingPage />} />
+          {/* <Route path="/car-race" element={<CarRacingPage />} /> */}
 
           {/* <Route path="/lucky-spinner" element={<LuckySpin />} /> */}
           <Route path="/lucky-spinner/event-desc" element={<EventDesc />} />
@@ -495,7 +495,7 @@ function AppContent() {
           />
           <Route path="/admin/ip-tracking" element={<IPInformation />} />
           <Route path="/admin/top-performance" element={<TopPerformance />} /> */}
-          <Route path="/admin/api-transaction" element={<ApiTransaction />} />
+          {/* <Route path="/admin/api-transaction" element={<ApiTransaction />} /> */}
 
           {/* VIP Page */}
           <Route path="/admin/vip-levels" element={<VIP />} />

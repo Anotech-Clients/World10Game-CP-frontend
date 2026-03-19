@@ -90,7 +90,7 @@ const bannerPosterContext = useContext(BannerPosterContext)
         <Typography
           sx={{ color: "#ffffff", fontWeight: "bold", marginBottom: 1 }}
         >
-         100Win Winning Streak 
+         World 10 Game Winning Streak 
         </Typography>
         {/* <Typography sx={{ marginBottom: 2 }}>
           {activity.description}

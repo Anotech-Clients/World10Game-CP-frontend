@@ -505,7 +505,7 @@ const options = [
                 zIndex: 9999,
               }}
             >
-              <LoadingLogo websiteName="100Win" />
+              <LoadingLogo websiteName="World 10 Game" />
             </div>
           )}
           <Box flexGrow={1}>

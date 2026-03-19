@@ -499,14 +499,14 @@ const VIP = () => {
         Quick Setup
       </Button>
       )}
-      <Button
+      {/* <Button
         variant="contained"
         startIcon={<AddIcon />}
         onClick={() => setOpenAddDialog(true)}
         fullWidth={{ xs: true, sm: false }} // Full width on small screens, auto width on larger screens
       >
         Add New Rule
-      </Button>
+      </Button> */}
     </Stack>
   </Stack>
 </Paper>

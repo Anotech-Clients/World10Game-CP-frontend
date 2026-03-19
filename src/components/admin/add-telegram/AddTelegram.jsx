@@ -462,7 +462,7 @@ const TelegramChannelManagement = () => {
                   sx={{
                     fontWeight: 600,
                     color: "#f8fafc",
-                    backgroundColor: "#f5f7ff",
+                    // backgroundColor: "#f5f7ff",
                     fontFamily: "Inter, sans-serif",
                   }}
                 >
@@ -472,7 +472,7 @@ const TelegramChannelManagement = () => {
                   sx={{
                     fontWeight: 600,
                     color: "#f8fafc",
-                    backgroundColor: "#f5f7ff",
+                    // backgroundColor: "#f5f7ff",
                     fontFamily: "Inter, sans-serif",
                   }}
                 >
@@ -483,7 +483,7 @@ const TelegramChannelManagement = () => {
                   sx={{
                     fontWeight: 600,
                     color: "#f8fafc",
-                    backgroundColor: "#f5f7ff",
+                    // backgroundColor: "#f5f7ff",
                     fontFamily: "Inter, sans-serif",
                   }}
                 >
@@ -513,14 +513,14 @@ const TelegramChannelManagement = () => {
                   <TableCell sx={{ fontFamily: "Inter, sans-serif" }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <LinkIcon
-                        sx={{ mr: 1, fontSize: 16, color: "#071251", opacity: 0.7 }}
+                        sx={{ mr: 1, fontSize: 16, color: "#fff", opacity: 0.7 }}
                       />
                       <a
                         href={channel.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          color: "#0a1a6a",
+                          color: "#fff",
                           textDecoration: "none",
                           "&:hover": {
                             textDecoration: "underline",
@@ -537,7 +537,7 @@ const TelegramChannelManagement = () => {
                         onClick={() => handleEdit(channel)}
                         size="small"
                         color="primary"
-                        sx={{ color: "#071251" }}
+                        sx={{ color: "#fff" }}
                       >
                         <EditIcon />
                       </IconButton>
