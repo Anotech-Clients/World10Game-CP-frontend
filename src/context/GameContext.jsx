@@ -30,7 +30,7 @@ export const SPRIBE_GAME_ARRAY = {
 }
 
 export const FISH_GAME_ARRAY = {
-  FISH: FISH_GAME_UIDS,
+  // FISH: FISH_GAME_UIDS,
 }
 
 export const CASINO_GAME_ARRAY = {
@@ -41,7 +41,7 @@ export const CASINO_GAME_ARRAY = {
 };
 
 export const SLOT_GAME_ARRAY = {
-  JILI: JILI_GAME_UIDS,
+  // JILI: JILI_GAME_UIDS,
   // CQ9: CQ9_GAME_UIDS,
   // MG: MG_GAME_UIDS,
   // PG: PG_GAME_UIDS,
