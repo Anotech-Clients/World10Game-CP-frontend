@@ -55,7 +55,7 @@ const BannerCard = () => {
     // },
     {
       key: "firstbonus",
-      fallback: "/assets/Banner/firstdeposit-2.webp",
+      fallback: "/assets/Banner/ban_firstbonus.webp",
       text: "Deposit Bonus",
       url: "/activity/first-deposit-bonus",
     },
@@ -79,13 +79,13 @@ const BannerCard = () => {
     // },
     {
       key: "realtimerebate",
-      fallback: "/assets/Banner/rebate-2.webp",
+      fallback: "/assets/Banner/ban_realtimerebate.webp",
       text: "Real-Time Rebate",
       url: "/activity/activity-details/activity-3",
     },
     {
       key: "youtube",
-      fallback: "/assets/Banner/youtube-2.webp",
+      fallback: "/assets/Banner/ban_youtube.webp",
       text: "Youtube Creative Video Event",
       url: "/activity/activity-details/activity-4",
     },
@@ -96,13 +96,13 @@ const BannerCard = () => {
     // },
     {
       key: "avaitor",
-      fallback: "/assets/Banner/aviator-2.webp",
+      fallback: "/assets/Banner/ban_avaitor.webp",
       text: "Aviator Bonus",
       url: "/activity/activity-details/activity-6",
     },
     {
       key: "usdt",
-      fallback: "/assets/Banner/usdt-2.webp",
+      fallback: "/assets/Banner/ban_usdt.webp",
       text: "USDT Bonus",
       url: "/activity/activity-details/activity-7",
     },

@@ -21,7 +21,7 @@ const images = [
   },
   {
     key:"youtube",
-    fallback: "/assets/Banner/youtube-2.webp",
+    fallback: "/assets/Banner/ban_youtube.webp",
     txt: "Thankyou for visting our website and your value time,our website deals with many features,hope you enjoy",
   },
   {
