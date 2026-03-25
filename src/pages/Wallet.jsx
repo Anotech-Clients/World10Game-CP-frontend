@@ -350,7 +350,7 @@ useEffect(() => {
                   />
                   <CircularProgress
                     variant="determinate"
-                    value={progressMainWallet}
+                    value={progressMainWallet?progressMainWallet:0}
                     size={80}
                     sx={{ color: "#fde4bc", position: "absolute" }}
                   />
@@ -369,7 +369,7 @@ useEffect(() => {
                       component="div"
                       sx={{ color: "#fde4bc", fontWeight: "bold" }}
                     >
-                      {`${Math.round(progressMainWallet)}%`}
+                      {`${Math.round(progressMainWallet?progressMainWallet:0)}%`}
                     </Typography>
                   </Box>
                 </Box>
@@ -438,11 +438,9 @@ useEffect(() => {
                   }}
                   fullWidth
                   onClick={handleTransfer}
-                  disabled={getThirdPartyBalance <= 0 || loading || countdown > 0}
+                  disabled={getThirdPartyBalance <= 0 || loading}
                 >
-                  {countdown > 0 || loading
-                    ? `Recalling... ${countdown}`
-                    : "Main wallet transfer"}
+                  {loading ? "Processing..." : "Main wallet transfer"}
                 </Button>
               </Grid>
               {/* Third Grid */}
