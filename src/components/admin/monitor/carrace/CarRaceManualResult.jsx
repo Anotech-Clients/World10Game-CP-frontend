@@ -182,158 +182,219 @@ const CarRaceManualResult = ({ selectedTimer, periodId }) => {
   )
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Card
-        elevation={0}
-        sx={{
-          width: '100%',
-          borderRadius: 1,
-          bgcolor: '#fff',
-          border: '1px solid',
-          borderColor: alpha(theme.palette.divider, 0.1)
-        }}
-      >
-        <CardContent sx={{ p: 3 }}>
-          <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <DirectionsCar sx={{ color: theme.palette.primary.main, fontSize: 24 }} />
-            <Typography variant="h6" sx={{ fontWeight: 500 }}>
-              Car Race Manual Result Configuration
-            </Typography>
-          </Box>
+    <Card sx={{ 
+      height: '100%',
+      backgroundColor: '#1e293b',
+      border: '1px solid rgba(148, 163, 184, 0.12)',
+      boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
+      borderRadius: '16px',
+      backdropFilter: 'blur(24px)',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-2px)',
+        boxShadow: '0 8px 32px rgba(99, 102, 241, 0.2)',
+        borderColor: 'rgba(99, 102, 241, 0.3)'
+      },
+    }}>
+      <CardContent>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <DirectionsCar sx={{ mr: 1, color: '#6366f1' }} />
+          <Typography variant="h6" sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+            🏎️ Car Race Manual Result Configuration
+          </Typography>
+        </Box>
 
-          {(error || success) && (
-            <Alert
-              severity={error ? "error" : "success"}
-              sx={{ mb: 3, borderRadius: 1 }}
-            >
-              {error || success}
-            </Alert>
-          )}
-
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              mb: 3,
-              bgcolor: alpha(theme.palette.background.default, 0.02),
-              borderRadius: 1
-            }}
+        {(error || success) && (
+          <Alert
+            severity={error ? "error" : "success"}
+            sx={{ mb: 3, borderRadius: 1 }}
           >
-            <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-              Input Settings
-            </Typography>
+            {error || success}
+          </Alert>
+        )}
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  label="First Place"
-                  placeholder="Car Number (1-10)"
-                  value={firstPlace}
-                  onChange={(e) => setFirstPlace(e.target.value)}
-                  type="number"
-                  inputProps={{ min: 1, max: 10 }}
-                  error={hasDuplicates && !!firstPlace && ([secondPlace, thirdPlace].includes(firstPlace))}
-                  helperText={hasDuplicates && ([secondPlace, thirdPlace].includes(firstPlace)) ? 'Duplicate value!' : ''}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1,
-                      bgcolor: '#fff'
-                    }  
-                  }}
-                />
-              </Grid>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 3,
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            border: '1px solid rgba(148, 163, 184, 0.12)',
+            borderRadius: '12px'
+          }}
+        >
+          <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+            Input Settings
+          </Typography>
 
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  label="Second Place"
-                  placeholder="Car Number (1-10)"
-                  value={secondPlace}
-                  onChange={(e) => setSecondPlace(e.target.value)}
-                  type="number"
-                  inputProps={{ min: 1, max: 10 }}
-                  error={hasDuplicates && !!secondPlace && ([firstPlace, thirdPlace].includes(secondPlace))}
-                  helperText={hasDuplicates && ([firstPlace, thirdPlace].includes(secondPlace)) ? 'Duplicate value!' : ''}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1,
-                      bgcolor: '#fff'
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                placeholder="First Place (1-10)"
+                value={firstPlace}
+                onChange={(e) => setFirstPlace(e.target.value)}
+                type="number"
+                inputProps={{ min: 1, max: 10 }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                    color: '#f8fafc',
+                    '& fieldset': {
+                      borderColor: 'rgba(148, 163, 184, 0.2)'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(99, 102, 241, 0.6)'
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#6366f1'
                     }
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  label="Third Place"
-                  placeholder="Car Number (1-10)"
-                  value={thirdPlace}
-                  onChange={(e) => setThirdPlace(e.target.value)}
-                  type="number"
-                  inputProps={{ min: 1, max: 10 }}
-                  error={hasDuplicates && !!thirdPlace && ([firstPlace, secondPlace].includes(thirdPlace))}
-                  helperText={hasDuplicates && ([firstPlace, secondPlace].includes(thirdPlace)) ? 'Duplicate value!' : ''}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 1,
-                      bgcolor: '#fff'
-                    }
-                  }}
-                />
-              </Grid>
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#f8fafc',
+                    fontFamily: 'Inter, system-ui, sans-serif'
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    color: '#94a3b8',
+                    opacity: 1
+                  }
+                }}
+              />
             </Grid>
 
-            <Button
-              type="submit"
-              variant="contained"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !resultDetails}
-              fullWidth
-              sx={{
-                py: 1,
-                mt: 3,
-                borderRadius: 1,
-                textTransform: 'none',
-                bgcolor: theme.palette.primary.main
-              }}
-            >
-              Set Result
-            </Button>
-          </Paper>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                placeholder="Second Place (1-10)"
+                value={secondPlace}
+                onChange={(e) => setSecondPlace(e.target.value)}
+                type="number"
+                inputProps={{ min: 1, max: 10 }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                    color: '#f8fafc',
+                    '& fieldset': {
+                      borderColor: 'rgba(148, 163, 184, 0.2)'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(99, 102, 241, 0.6)'
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#6366f1'
+                    }
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#f8fafc',
+                    fontFamily: 'Inter, system-ui, sans-serif'
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    color: '#94a3b8',
+                    opacity: 1
+                  }
+                }}
+              />
+            </Grid>
 
-          <Paper
-            elevation={0}
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                placeholder="Third Place (1-10)"
+                value={thirdPlace}
+                onChange={(e) => setThirdPlace(e.target.value)}
+                type="number"
+                inputProps={{ min: 1, max: 10 }}
+                sx={{
+                  mb: 2,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                    color: '#f8fafc',
+                    '& fieldset': {
+                      borderColor: 'rgba(148, 163, 184, 0.2)'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'rgba(99, 102, 241, 0.6)'
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#6366f1'
+                    }
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#f8fafc',
+                    fontFamily: 'Inter, system-ui, sans-serif'
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    color: '#94a3b8',
+                    opacity: 1
+                  }
+                }}
+              />
+            </Grid>
+          </Grid>
+
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={isSubmitting || !resultDetails || hasDuplicates}
+            fullWidth
             sx={{
-              p: 3,
-              bgcolor: alpha(theme.palette.background.default, 0.02),
-              borderRadius: 1
+              py: 1.5,
+              mt: 2,
+              borderRadius: '8px',
+              textTransform: 'none',
+              fontFamily: 'Inter, system-ui, sans-serif',
+              fontWeight: 600,
+              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #818cf8 0%, #a855f7 100%)'
+              },
+              '&:disabled': {
+                background: 'rgba(148, 163, 184, 0.3)',
+                color: 'rgba(248, 250, 252, 0.5)'
+              }
             }}
           >
-            <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-              Result Preview
-            </Typography>
+            Set Result
+          </Button>
+        </Paper>
 
-            {resultDetails ? (
-              <Box>
-                {renderPositionCard("First Place", firstPlace, resultDetails.firstPlace)}
-                {renderPositionCard("Second Place", secondPlace, resultDetails.secondPlace)}
-                {renderPositionCard("Third Place", thirdPlace, resultDetails.thirdPlace)}
-              </Box>
-            ) : (
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ textAlign: 'center', py: 3 }}
-              >
-                Enter car numbers for all positions to see the preview
-              </Typography>
-            )}
-          </Paper>
-        </CardContent>
-      </Card>
-    </Box>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+            border: '1px solid rgba(148, 163, 184, 0.12)',
+            borderRadius: '12px'
+          }}
+        >
+          <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 500, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+            Result Preview
+          </Typography>
+
+          {resultDetails ? (
+            <Box>
+              {renderPositionCard("First Place", firstPlace, resultDetails.firstPlace)}
+              {renderPositionCard("Second Place", secondPlace, resultDetails.secondPlace)}
+              {renderPositionCard("Third Place", thirdPlace, resultDetails.thirdPlace)}
+            </Box>
+          ) : (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ textAlign: 'center', py: 3 }}
+            >
+              Enter car numbers for all positions to see the preview
+            </Typography>
+          )}
+        </Paper>
+      </CardContent>
+    </Card>
   )
 }
 

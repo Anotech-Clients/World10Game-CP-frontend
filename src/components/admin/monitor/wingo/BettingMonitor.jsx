@@ -32,6 +32,7 @@ const sizeOptions = [
   { value: "BIG", color: "#3b82f6" },
   { value: "SMALL", color: "#f97316" },
 ];
+
 const TIMER_MAP = {
   ONE: "ONE_MINUTE_TIMER",
   THREE: "THREE_MINUTE_TIMER",
@@ -39,7 +40,6 @@ const TIMER_MAP = {
   TEN: "TEN_MINUTE_TIMER",
   THIRTY: "THIRTY_TIMER",
 };
-
 
 const BetMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
   const theme = useTheme();

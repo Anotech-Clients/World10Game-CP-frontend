@@ -171,215 +171,238 @@ const FiveDManualResult = ({ selectedTimer, periodId }) => {
   };
 
   return (
-    <Box sx={{ width: '100%', mb: 3 }}>
-      <Card
-        elevation={0}
-        sx={{
-          width: '100%',
-          borderRadius: 1,
-          bgcolor: '#fff',
-          border: '1px solid',
-          borderColor: alpha(theme.palette.divider, 0.1)
-        }}
-      >
-        <CardContent sx={{ px: 1, py: 3 }}>
-          <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Casino sx={{ color: theme.palette.primary.main, fontSize: 24 }} />
-            <Typography variant="h6" sx={{ fontWeight: 500 }}>
-              FiveD Manual Result Configuration
-            </Typography>
-          </Box>
+    <Card sx={{ 
+      height: '100%',
+      backgroundColor: '#1e293b',
+      border: '1px solid rgba(148, 163, 184, 0.12)',
+      boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
+      borderRadius: '16px',
+      backdropFilter: 'blur(24px)',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-2px)',
+        boxShadow: '0 8px 32px rgba(99, 102, 241, 0.2)',
+        borderColor: 'rgba(99, 102, 241, 0.3)'
+      },
+    }}>
+      <CardContent>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Casino sx={{ mr: 1, color: '#6366f1' }} />
+          <Typography variant="h6" sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+            FiveD Manual Result Configuration
+          </Typography>
+        </Box>
 
-          {(error || success) && (
-            <Alert
-              severity={error ? "error" : "success"}
-              sx={{ borderRadius: 1, mb: 2 }}
+        {(error || success) && (
+          <Alert
+            severity={error ? "error" : "success"}
+            sx={{ borderRadius: 1, mb: 2 }}
+          >
+            {error || success}
+          </Alert>
+        )}
+
+        <Grid container spacing={3} direction="column">
+          <Grid item xs={12}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                mb: 3,
+                backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                border: '1px solid rgba(148, 163, 184, 0.12)',
+                borderRadius: '12px'
+              }}
             >
-              {error || success}
-            </Alert>
-          )}
-
-          <Grid container spacing={3} direction="column">
-            <Grid item xs={12}>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 3,
-                  bgcolor: alpha(theme.palette.background.default, 0.02),
-                  borderRadius: 1
-                }}
-              >
-                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-                  Section Values Input
-                </Typography>
-                
-                <Grid container spacing={2}>
-                  {['sectionA', 'sectionB', 'sectionC', 'sectionD', 'sectionE'].map((section, index) => (
-                    <Grid item xs={12} sm={4} md={2.4} key={section}>
-                      <TextField
-                        fullWidth
-                        label={`Section ${section.charAt(section.length - 1)}`}
-                        value={sectionValues[section]}
-                        onChange={(e) => handleSectionValueChange(section, e.target.value)}
-                        type="number"
-                        inputProps={{ 
-                          min: 0, 
-                          max: 9,
-                          step: 1 
-                        }}
-                        error={sectionValues[section] !== '' && 
-                              (!Number.isInteger(Number(sectionValues[section])) || 
-                               Number(sectionValues[section]) < 0 || 
-                               Number(sectionValues[section]) > 9)}
-                        helperText={sectionValues[section] !== '' && 
-                                  (!Number.isInteger(Number(sectionValues[section])) || 
-                                   Number(sectionValues[section]) < 0 || 
-                                   Number(sectionValues[section]) > 9) ? "Enter 0-9" : ""}
-                        sx={{
-                          '& .MuiOutlinedInput-root': {
-                            borderRadius: 1,
-                            bgcolor: '#fff'
+              <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+                Section Values Input
+              </Typography>
+              
+              <Grid container spacing={2}>
+                {['sectionA', 'sectionB', 'sectionC', 'sectionD', 'sectionE'].map((section, index) => (
+                  <Grid item xs={12} sm={4} md={2.4} key={section}>
+                    <TextField
+                      fullWidth
+                      label={`Section ${section.toUpperCase()}`}
+                      value={sectionValues[section]}
+                      onChange={(e) => handleSectionValueChange(section, e.target.value)}
+                      type="number"
+                      inputProps={{ min: 0, max: 9 }}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '8px',
+                          backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                          color: '#f8fafc',
+                          '& fieldset': {
+                            borderColor: 'rgba(148, 163, 184, 0.2)'
+                          },
+                          '&:hover fieldset': {
+                            borderColor: 'rgba(99, 102, 241, 0.6)'
+                          },
+                          '&.Mui-focused fieldset': {
+                            borderColor: '#6366f1'
                           }
-                        }}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
+                        },
+                        '& .MuiInputBase-input': {
+                          color: '#f8fafc',
+                          fontFamily: 'Inter, system-ui, sans-serif'
+                        },
+                        '& .MuiInputLabel-root': {
+                          color: '#94a3b8',
+                          fontFamily: 'Inter, system-ui, sans-serif',
+                          '&.Mui-focused': {
+                            color: '#6366f1'
+                          }
+                        }
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || !resultDetails}
-                  fullWidth
-                  sx={{
-                    mt: 2,
-                    py: 1,
-                    borderRadius: 1,
-                    textTransform: 'none',
-                    bgcolor: theme.palette.primary.main
-                  }}
-                >
-                  Set Result
-                </Button>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Paper
-                elevation={0}
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !resultDetails}
+                fullWidth
                 sx={{
-                  p: 3,
-                  bgcolor: alpha(theme.palette.background.default, 0.02),
-                  borderRadius: 1
+                  py: 1.5,
+                  mt: 2,
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  fontWeight: 600,
+                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #818cf8 0%, #a855f7 100%)'
+                  },
+                  '&:disabled': {
+                    background: 'rgba(148, 163, 184, 0.3)',
+                    color: 'rgba(248, 250, 252, 0.5)'
+                  }
                 }}
               >
-                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-                  Result Preview
-                </Typography>
+                Set Result
+              </Button>
+            </Paper>
+          </Grid>
 
-                {resultDetails ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    {/* Section Values */}
-                    <Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        Section Values
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {Object.entries(resultDetails.sectionNumbers).map(([section, value]) => (
-                          <Chip
-                            key={section}
-                            label={`${section.charAt(section.length - 1)}: ${value}`}
-                            sx={{
-                              bgcolor: alpha(theme.palette.primary.main, 0.1),
-                              color: theme.palette.primary.main,
-                              fontWeight: 500
-                            }}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
+          <Grid item xs={12}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                border: '1px solid rgba(148, 163, 184, 0.12)',
+                borderRadius: '12px'
+              }}
+            >
+              <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 500, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+                Result Preview
+              </Typography>
 
-                    {/* Sum */}
-                    <Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        Sum: {resultDetails.sumSection}
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              {resultDetails ? (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  {/* Section Values */}
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Section Values
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      {Object.entries(resultDetails.sectionNumbers).map(([section, value]) => (
                         <Chip
-                          label={`Sum: ${SIZE_TYPES[resultDetails.sizeSum]}`}
+                          key={section}
+                          label={`${section.charAt(section.length - 1)}: ${value}`}
                           sx={{
-                            bgcolor: alpha(theme.palette.warning.main, 0.1),
-                            color: theme.palette.warning.main,
+                            bgcolor: alpha(theme.palette.primary.main, 0.1),
+                            color: theme.palette.primary.main,
                             fontWeight: 500
                           }}
                         />
-                        <Chip
-                          label={`Sum: ${PARITY_TYPES[resultDetails.paritySum]}`}
-                          sx={{
-                            bgcolor: alpha(theme.palette.info.main, 0.1),
-                            color: theme.palette.info.main,
-                            fontWeight: 500
-                          }}
-                        />
-                      </Box>
-                    </Box>
-
-                    {/* Sections Size */}
-                    <Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        Section Sizes
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {Object.entries(resultDetails.sizes).map(([section, size]) => (
-                          <Chip
-                            key={section}
-                            label={`${section.charAt(section.length - 1)}: ${SIZE_TYPES[size]}`}
-                            sx={{
-                              bgcolor: alpha(theme.palette.success.main, 0.1),
-                              color: theme.palette.success.main,
-                              fontWeight: 500
-                            }}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
-
-                    {/* Sections Parity */}
-                    <Box>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        Section Parities
-                      </Typography>
-                      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {Object.entries(resultDetails.parities).map(([section, parity]) => (
-                          <Chip
-                            key={section}
-                            label={`${section.charAt(section.length - 1)}: ${PARITY_TYPES[parity]}`}
-                            sx={{
-                              bgcolor: alpha(theme.palette.secondary.main, 0.1),
-                              color: theme.palette.secondary.main,
-                              fontWeight: 500
-                            }}
-                          />
-                        ))}
-                      </Box>
+                      ))}
                     </Box>
                   </Box>
-                ) : (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ textAlign: 'center', py: 3 }}
-                  >
-                    Enter section values (0-9) to see the preview
-                  </Typography>
-                )}
-              </Paper>
-            </Grid>
+
+                  {/* Sum */}
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Sum: {resultDetails.sumSection}
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      <Chip
+                        label={`Sum: ${SIZE_TYPES[resultDetails.sizeSum]}`}
+                        sx={{
+                          bgcolor: alpha(theme.palette.warning.main, 0.1),
+                          color: theme.palette.warning.main,
+                          fontWeight: 500
+                        }}
+                      />
+                      <Chip
+                        label={`Sum: ${PARITY_TYPES[resultDetails.paritySum]}`}
+                        sx={{
+                          bgcolor: alpha(theme.palette.info.main, 0.1),
+                          color: theme.palette.info.main,
+                          fontWeight: 500
+                        }}
+                      />
+                    </Box>
+                  </Box>
+
+                  {/* Sections Size */}
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Section Sizes
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      {Object.entries(resultDetails.sizes).map(([section, size]) => (
+                        <Chip
+                          key={section}
+                          label={`${section.charAt(section.length - 1)}: ${SIZE_TYPES[size]}`}
+                          sx={{
+                            bgcolor: alpha(theme.palette.success.main, 0.1),
+                            color: theme.palette.success.main,
+                            fontWeight: 500
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+
+                  {/* Sections Parity */}
+                  <Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                      Section Parities
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      {Object.entries(resultDetails.parities).map(([section, parity]) => (
+                        <Chip
+                          key={section}
+                          label={`${section.charAt(section.length - 1)}: ${PARITY_TYPES[parity]}`}
+                          sx={{
+                            bgcolor: alpha(theme.palette.secondary.main, 0.1),
+                            color: theme.palette.secondary.main,
+                            fontWeight: 500
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </Box>
+              ) : (
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ textAlign: 'center', py: 3 }}
+                >
+                  Enter section values (0-9) to see the preview
+                </Typography>
+              )}
+            </Paper>
           </Grid>
-        </CardContent>
-      </Card>
-    </Box>
+        </Grid>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -1,47 +1,44 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
-  Box,
-  Paper,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Alert,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  LinearProgress,
-  useTheme,
+    Box,
+    Paper,
+    Typography,
+    Card,
+    CardContent,
+    Grid,
+    Alert,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Chip,
+    useTheme,
+    LinearProgress,
 } from "@mui/material";
 import { Users, TrendingUp } from "lucide-react";
 
-/* -------------------- Constants -------------------- */
-
+// Constants for K3 game options
 const numberOptions = [
-  "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT",
-  "NINE", "TEN", "ELEVEN", "TWELVE", "THIRTEEN",
-  "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN"
+    "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT",
+    "NINE", "TEN", "ELEVEN", "TWELVE", "THIRTEEN",
+    "FOURTEEN", "FIFTEEN", "SIXTEEN", "SEVENTEEN", "EIGHTEEN"
 ];
 
 const specialOptions = [
-  { value: "ODD", color: "#22c55e" },
-  { value: "EVEN", color: "#a855f7" },
-  { value: "BIG", color: "#3b82f6" },
-  { value: "SMALL", color: "#f97316" }
+    { value: "ODD", color: "#22c55e" },
+    { value: "EVEN", color: "#a855f7" },
+    { value: "BIG", color: "#3b82f6" },
+    { value: "SMALL", color: "#f97316" }
 ];
 
 const combinationOptions = [
-  { value: "TWO_SAME", label: "Two Same", color: "#ef4444" },
-  { value: "THREE_SAME", label: "Three Same", color: "#ec4899" },
-  { value: "ALL_DIFFERENT", label: "All Different", color: "#14b8a6" },
-  { value: "CONSECUTIVE", label: "Consecutive", color: "#f59e0b" }
+    { value: "TWO_SAME", color: "#ef4444", label: "Two Same" },
+    { value: "THREE_SAME", color: "#ec4899", label: "Three Same" },
+    { value: "ALL_DIFFERENT", color: "#14b8a6", label: "All Different" },
+    { value: "CONSECUTIVE", color: "#f59e0b", label: "Consecutive" }
 ];
-
-/* -------------------- Small UI Helper -------------------- */
 
 const ProgressBar = ({ value, color = "primary.main" }) => (
   <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -67,8 +64,6 @@ const ProgressBar = ({ value, color = "primary.main" }) => (
     <Typography variant="caption">{value.toFixed(1)}%</Typography>
   </Box>
 );
-
-/* -------------------- Component -------------------- */
 
 const K3BettingMonitor = ({ websocketUrl, selectedTimer, periodId }) => {
   const theme = useTheme();

@@ -84,23 +84,26 @@ const BetHistory = ({ selectedTimer, periodId, updateTrigger }) => {
         const date = new Date(dateTimeString);
         return date.toLocaleString();
     };
-
+    
     return (
-        <Card
-            elevation={0}
-            sx={{
-                width: '100%',
-                borderRadius: 1,
-                bgcolor: '#fff',
-                border: '1px solid',
-                borderColor: alpha(theme.palette.divider, 0.1),
-                // mt: 3
-            }}
-        >
-            <CardContent sx={{ p: 3 }}>
-                <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <History sx={{ color: theme.palette.primary.main, fontSize: 24 }} />
-                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
+        <Card sx={{
+            height: '100%',
+            backgroundColor: '#1e293b',
+            border: '1px solid rgba(148, 163, 184, 0.12)',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
+            borderRadius: '16px',
+            backdropFilter: 'blur(24px)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 32px rgba(99, 102, 241, 0.2)',
+                borderColor: 'rgba(99, 102, 241, 0.3)'
+            },
+        }}>
+            <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <History sx={{ mr: 1, color: '#6366f1' }} />
+                    <Typography variant="h6" sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
                         Game History
                     </Typography>
                 </Box>
@@ -123,58 +126,66 @@ const BetHistory = ({ selectedTimer, periodId, updateTrigger }) => {
                     </Paper>
                 ) : (
                     <>
-                        <TableContainer
-                            component={Paper}
-                            elevation={0}
-                            sx={{
-                                borderRadius: 1,
-                                mb: 2,
-                                overflow: 'auto', // Ensure the container can scroll
-                                '&::-webkit-scrollbar': {
-                                    display: 'none', // Hide the scrollbar for WebKit browsers (Chrome, Safari, etc.)
-                                },
-                                scrollbarWidth: 'none', // Hide the scrollbar for Firefox
-                                msOverflowStyle: 'none', // Hide the scrollbar for IE and Edge
-                            }}
-                        >
+                        <TableContainer component={Paper} sx={{
+                            maxHeight: 400,
+                            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                            border: '1px solid rgba(148, 163, 184, 0.12)',
+                            borderRadius: '12px',
+                            '& .MuiTableCell-root': {
+                                color: '#f8fafc',
+                                borderColor: 'rgba(148, 163, 184, 0.12)',
+                                fontFamily: 'Inter, system-ui, sans-serif'
+                            },
+                            // Hide scrollbar but keep functionality
+                            '&::-webkit-scrollbar': {
+                                display: 'none'
+                            },
+                            '-ms-overflow-style': 'none',
+                            'scrollbar-width': 'none'
+                        }}>
                             <Table sx={{ minWidth: 650 }}>
-                                <TableHead sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: 600 }}>Period ID</TableCell>
-                                        <TableCell sx={{ fontWeight: 600 }}>Number</TableCell>
-                                        <TableCell sx={{ fontWeight: 600 }}>Color</TableCell>
-                                        <TableCell sx={{ fontWeight: 600 }}>Size</TableCell>
-                                        <TableCell sx={{ fontWeight: 600 }}>Manual</TableCell>
-                                        {/* <TableCell sx={{ fontWeight: 600 }}>Time</TableCell> */}
+                                <TableHead>
+                                    <TableRow sx={{ backgroundColor: 'rgba(15, 23, 42, 0.8)' }}>
+                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Period ID</TableCell>
+                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Number</TableCell>
+                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Color</TableCell>
+                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Size</TableCell>
+                                        <TableCell sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>Manual</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {history.length > 0 ? (
                                         history.map((item) => (
-                                            <TableRow key={item.id} hover>
-                                                <TableCell>{item.periodId}</TableCell>
+                                            <TableRow key={item.periodId} sx={{
+                                                '&:nth-of-type(odd)': { backgroundColor: 'rgba(15, 23, 42, 0.3)' },
+                                                '&:hover': { backgroundColor: 'rgba(99, 102, 241, 0.1)' }
+                                            }}>
+                                                <TableCell sx={{ color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>{item.periodId}</TableCell>
                                                 <TableCell>
                                                     <Chip
                                                         label={item.numberOutcome}
                                                         size="small"
                                                         sx={{
-                                                            bgcolor: alpha(theme.palette.primary.main, 0.1),
-                                                            color: theme.palette.primary.main,
-                                                            fontWeight: 500
+                                                            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                                                            color: '#f8fafc',
+                                                            fontWeight: 500,
+                                                            fontFamily: 'Inter, system-ui, sans-serif'
                                                         }}
                                                     />
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Box sx={{ display: 'flex', gap: 1 }}>
-                                                        {item.colorOutcome.map((color) => (
+                                                    <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                                                        {item.colorOutcome.map((color, index) => (
                                                             <Chip
-                                                                key={color}
+                                                                key={index}
                                                                 label={color}
                                                                 size="small"
                                                                 sx={{
                                                                     bgcolor: COLOR_STYLES[color],
                                                                     color: '#fff',
-                                                                    fontWeight: 500
+                                                                    fontWeight: 500,
+                                                                    minWidth: '45px',
+                                                                    fontFamily: 'Inter, system-ui, sans-serif'
                                                                 }}
                                                             />
                                                         ))}
@@ -185,9 +196,12 @@ const BetHistory = ({ selectedTimer, periodId, updateTrigger }) => {
                                                         label={item.sizeOutcome}
                                                         size="small"
                                                         sx={{
-                                                            bgcolor: alpha(theme.palette.success.main, 0.1),
-                                                            color: theme.palette.success.main,
-                                                            fontWeight: 500
+                                                            backgroundColor: item.sizeOutcome === 'BIG'
+                                                                ? 'rgba(34, 197, 94, 0.2)'
+                                                                : 'rgba(251, 146, 60, 0.2)',
+                                                            color: item.sizeOutcome === 'BIG' ? '#22c55e' : '#fb923c',
+                                                            fontWeight: 500,
+                                                            fontFamily: 'Inter, system-ui, sans-serif'
                                                         }}
                                                     />
                                                 </TableCell>
@@ -196,13 +210,12 @@ const BetHistory = ({ selectedTimer, periodId, updateTrigger }) => {
                                                         label={item.manuallySet ? 'Yes' : 'No'}
                                                         size="small"
                                                         sx={{
-                                                            bgcolor: item.manuallySet
-                                                                ? alpha(theme.palette.warning.main, 0.1)
-                                                                : alpha(theme.palette.grey[500], 0.1),
-                                                            color: item.manuallySet
-                                                                ? theme.palette.warning.main
-                                                                : theme.palette.grey[700],
-                                                            fontWeight: 500
+                                                            backgroundColor: item.manuallySet
+                                                                ? 'rgba(34, 197, 94, 0.2)'
+                                                                : 'rgba(239, 68, 68, 0.2)',
+                                                            color: item.manuallySet ? '#22c55e' : '#ef4444',
+                                                            fontWeight: 500,
+                                                            fontFamily: 'Inter, system-ui, sans-serif'
                                                         }}
                                                     />
                                                 </TableCell>

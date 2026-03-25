@@ -170,26 +170,29 @@ const K3ManualResult = ({ selectedTimer, periodId }) => {
   };
 
   return (
-    <Box sx={{ width: '100%', mb: 3 }}>
-      <Card
-        elevation={0}
-        sx={{
-          width: '100%',
-          borderRadius: 1,
-          bgcolor: '#fff',
-          border: '1px solid',
-          borderColor: alpha(theme.palette.divider, 0.1)
-        }}
-      >
-        <CardContent sx={{ px: 1,py: 3 }}>
-          <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Casino sx={{ color: theme.palette.primary.main, fontSize: 24 }} />
-            <Typography variant="h6" sx={{ fontWeight: 500 }}>
-              K3 Manual Result Configuration
-            </Typography>
-          </Box>
+    <Card sx={{ 
+      height: '100%',
+      backgroundColor: '#1e293b',
+      border: '1px solid rgba(148, 163, 184, 0.12)',
+      boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
+      borderRadius: '16px',
+      backdropFilter: 'blur(24px)',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-2px)',
+        boxShadow: '0 8px 32px rgba(99, 102, 241, 0.2)',
+        borderColor: 'rgba(99, 102, 241, 0.3)'
+      },
+    }}>
+      <CardContent>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Casino sx={{ mr: 1, color: '#6366f1' }} />
+          <Typography variant="h6" sx={{ fontWeight: 600, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
+            K3 Manual Result Configuration
+          </Typography>
+        </Box>
 
-          {(error || success) && (
+        {(error || success) && (
             <Alert
               severity={error ? "error" : "success"}
               sx={{ borderRadius: 1 }}
@@ -204,11 +207,13 @@ const K3ManualResult = ({ selectedTimer, periodId }) => {
                 elevation={0}
                 sx={{
                   p: 3,
-                  bgcolor: alpha(theme.palette.background.default, 0.02),
-                  borderRadius: 1
+                  mb: 3,
+                  backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                  border: '1px solid rgba(148, 163, 184, 0.12)',
+                  borderRadius: '12px'
                 }}
               >
-                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
+                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
                   Dice Values Input
                 </Typography>
                 
@@ -221,17 +226,32 @@ const K3ManualResult = ({ selectedTimer, periodId }) => {
                         value={value}
                         onChange={(e) => handleDiceValueChange(index, e.target.value)}
                         type="number"
-                        inputProps={{ 
-                          min: 1, 
-                          max: 6,
-                          step: 1 
-                        }}
-                        error={value !== '' && (!Number.isInteger(Number(value)) || Number(value) < 1 || Number(value) > 6)}
-                        helperText={value !== '' && (!Number.isInteger(Number(value)) || Number(value) < 1 || Number(value) > 6) ? "Enter 1-6" : ""}
+                        inputProps={{ min: 1, max: 6 }}
                         sx={{
                           '& .MuiOutlinedInput-root': {
-                            borderRadius: 1,
-                            bgcolor: '#fff'
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(30, 41, 59, 0.8)',
+                            color: '#f8fafc',
+                            '& fieldset': {
+                              borderColor: 'rgba(148, 163, 184, 0.2)'
+                            },
+                            '&:hover fieldset': {
+                              borderColor: 'rgba(99, 102, 241, 0.6)'
+                            },
+                            '&.Mui-focused fieldset': {
+                              borderColor: '#6366f1'
+                            }
+                          },
+                          '& .MuiInputBase-input': {
+                            color: '#f8fafc',
+                            fontFamily: 'Inter, system-ui, sans-serif'
+                          },
+                          '& .MuiInputLabel-root': {
+                            color: '#94a3b8',
+                            fontFamily: 'Inter, system-ui, sans-serif',
+                            '&.Mui-focused': {
+                              color: '#6366f1'
+                            }
                           }
                         }}
                       />
@@ -246,11 +266,20 @@ const K3ManualResult = ({ selectedTimer, periodId }) => {
                   disabled={isSubmitting || !resultDetails}
                   fullWidth
                   sx={{
+                    py: 1.5,
                     mt: 2,
-                    py: 1,
-                    borderRadius: 1,
+                    borderRadius: '8px',
                     textTransform: 'none',
-                    bgcolor: theme.palette.primary.main
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontWeight: 600,
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #818cf8 0%, #a855f7 100%)'
+                    },
+                    '&:disabled': {
+                      background: 'rgba(148, 163, 184, 0.3)',
+                      color: 'rgba(248, 250, 252, 0.5)'
+                    }
                   }}
                 >
                   Set Result
@@ -262,18 +291,18 @@ const K3ManualResult = ({ selectedTimer, periodId }) => {
               <Paper
                 elevation={0}
                 sx={{
-                  pl: 3,
-                  pt:3.5,
-                  bgcolor: alpha(theme.palette.background.default, 0.02),
-                  borderRadius: 1
+                  p: 3,
+                  backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                  border: '1px solid rgba(148, 163, 184, 0.12)',
+                  borderRadius: '12px'
                 }}
               >
-                <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 500 }}>
+                <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 500, color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif' }}>
                   Result Preview
                 </Typography>
 
                 {resultDetails ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2.5,justifyContent:'space-between' }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2.5, justifyContent: 'space-between' }}>
                     <Box>
                       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                         Dice Values
@@ -352,7 +381,6 @@ const K3ManualResult = ({ selectedTimer, periodId }) => {
           </Grid>
         </CardContent>
       </Card>
-    </Box>
   );
 };
 
