@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Mobile from "../components/layout/Mobile";
 import IconButton from "@mui/material/IconButton";
 import Typography from '@mui/material/Typography';
@@ -8,12 +8,11 @@ import Box from '@mui/material/Box';
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import BottomNavigationArea from "../components/common/BottomNavigation";
-import { domain } from "../utils/Secret";
+import { apidomain, clientPrefix, clientSecretKey, domain } from "../utils/Secret";
 import { useAuth } from "../context/AuthContext"; // Import useAuth hook
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { UserContext } from "../context/UserState"
 import LoadingLogo from "../components/utils/LodingLogo";
-
 const Wallet = ({ children }) => {
   const [dwInfo, setDwInfo] = useState({
     totalDeposit: 0,
@@ -133,6 +132,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
+
 
   const data = [
     {
