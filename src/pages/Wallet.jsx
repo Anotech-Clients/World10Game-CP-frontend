@@ -20,13 +20,12 @@ const Wallet = ({ children }) => {
     totalWithdrawal: 0,
     balance: 0
   });
-  const [thirdPartyWalletBalance, setThirdPartyWalletBalance] = useState(0);
-  const [getThirdPartyBalance, setGetThirdPartyBalance] = useState(null);
   const [logoLoading, setLogoLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
   const { axiosInstance } = useAuth();
   const navigate = useNavigate();
-  const { userWallet, getWalletBalance, userData } = useContext(UserContext);
+  const { userWallet, getWalletBalance, userData, getThirdPartyBalance, fetchThirdPartyBalance } = useContext(UserContext);
 
   useEffect(() => {
     const setVh = () => {
@@ -41,22 +40,30 @@ const Wallet = ({ children }) => {
   }, []);
 
   const mainWalletBalance = userWallet ? userWallet : 0;
-  const progressMainWallet = Math.min((mainWalletBalance / dwInfo.totalDeposit) * 100, 100);
-  const progressThirdPartyWallet = Math.min((getThirdPartyBalance / dwInfo.totalDeposit) * 100, 100);
+  const progressMainWallet = mainWalletBalance > 0 ? Math.min((mainWalletBalance / dwInfo.totalDeposit) * 100, 100) : 0;
+  const progressThirdPartyWallet = getThirdPartyBalance > 0 ? Math.min((getThirdPartyBalance / dwInfo.totalDeposit) * 100, 100) : 0;
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setLogoLoading(false);
-    }, 1000);
+      setLogoLoading(false); 
+    }, 1500);
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer); // Cleanup
   }, []);
-  
-  // Fetch wallet balance and DW info when component mounts
+
   useEffect(() => {
-    getWalletBalance();
+    getWalletBalance()
     fetchDwInfo();
-  }, []);
+    setLogoLoading(true)
+    if(!getThirdPartyBalance || getThirdPartyBalance <= 0) {
+    fetchThirdPartyBalance();
+    const timer = setTimeout(() => {
+      setLogoLoading(false); 
+    }, 1500);
+
+    return () => clearTimeout(timer); 
+    }
+  }, [getThirdPartyBalance])
 
   // Fetch deposit and withdrawal information
   const fetchDwInfo = async () => {
@@ -65,7 +72,7 @@ const Wallet = ({ children }) => {
         const response = await axiosInstance.get(`${domain}/api/wallet/common/dw-info`, {
           withCredentials: true,
         });
-        
+
         if (response.data.success) {
           setDwInfo({
             totalDeposit: response.data.data.totalDeposit || 0,
@@ -79,42 +86,35 @@ const Wallet = ({ children }) => {
     }
   };
 
-  const fetchThirdPartyBalance = async () => {
-    try {
-      const response = await axiosInstance.get(`${domain}/api/api-wrapper/get-wallet-balance`, {
-        withCredentials: true,
-      });
-      setGetThirdPartyBalance(response.data.ThirdPartyWalletAmount);
-    } catch (err) {
-      console.error("Error fetching third-party wallet balance:", err);
-    }
-  };
+useEffect(() => {
+  let timer;
+  if (countdown > 0) {
+    timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
+  }
+  return () => clearTimeout(timer);
+}, [countdown]);
 
-  // Fetch initial data
-  useEffect(() => {
-    fetchThirdPartyBalance();
-  }, []);
 
   // Handle wallet transfer
   const handleTransfer = async () => {
     if (!userData?.uid || loading) return;
 
     setLoading(true);
+    // setCountdown(5);
 
     try {
-      await fetchThirdPartyBalance();
-
       if (getThirdPartyBalance <= 0) {
         console.error("Insufficient balance for transfer.");
         setLoading(false);
         return;
       }
-
       const transferResponse = await axiosInstance.post(
-        `${domain}/api/api-wrapper/wallet-transfer`,
+        `${domain}/api/huidu/balance-sync`,
         {
-          uid: userData.uid,
-          amount: getThirdPartyBalance,
+          apiKey: clientPrefix,
+          apiSecret: clientSecretKey,
+          wrapperUrl: apidomain,
+          transfer: true,
         },
         { withCredentials: true }
       );
@@ -122,22 +122,17 @@ const Wallet = ({ children }) => {
       if (transferResponse.data.success) {
         await getWalletBalance();
         await fetchThirdPartyBalance();
-        await fetchDwInfo(); // Refresh deposit/withdrawal info after transfer
-
-        //console.log("Wallet transfer successful:", transferResponse.data);
+        await fetchDwInfo();
       } else {
         console.error("Wallet transfer failed:", transferResponse.data.message);
       }
+
     } catch (err) {
       console.error("Error during wallet transfer:", err);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    //console.log("loading", loading);
-  }, [loading]);
 
   const data = [
     {
@@ -355,7 +350,7 @@ const Wallet = ({ children }) => {
                   />
                   <CircularProgress
                     variant="determinate"
-                    value={progressMainWallet?progressMainWallet:0}
+                    value={progressMainWallet}
                     size={80}
                     sx={{ color: "#fde4bc", position: "absolute" }}
                   />
@@ -374,7 +369,7 @@ const Wallet = ({ children }) => {
                       component="div"
                       sx={{ color: "#fde4bc", fontWeight: "bold" }}
                     >
-                      {`${Math.round(progressMainWallet?progressMainWallet:0)}%`}
+                      {`${Math.round(progressMainWallet)}%`}
                     </Typography>
                   </Box>
                 </Box>
@@ -443,9 +438,11 @@ const Wallet = ({ children }) => {
                   }}
                   fullWidth
                   onClick={handleTransfer}
-                  disabled={getThirdPartyBalance <= 0 || loading}
+                  disabled={getThirdPartyBalance <= 0 || loading || countdown > 0}
                 >
-                  {loading ? "Processing..." : "Main wallet transfer"}
+                  {countdown > 0 || loading
+                    ? `Recalling... ${countdown}`
+                    : "Main wallet transfer"}
                 </Button>
               </Grid>
               {/* Third Grid */}
