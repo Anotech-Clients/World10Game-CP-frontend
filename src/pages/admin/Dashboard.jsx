@@ -333,7 +333,7 @@ const Dashboard = () => {
                       variant="outlined"
                       size="small"
                       InputProps={{
-                        startAdornment: "pkr ",
+                        startAdornment: "₹ ",
                       }}
                     />
                   </Box>
@@ -417,7 +417,7 @@ const Dashboard = () => {
                     </Typography>
                   </Box>
                   <Typography variant="h6" sx={{ mb: 1 }}>
-                    pkr {value.amount.toLocaleString()}
+                    ₹ {value.amount.toLocaleString()}
                   </Typography>
                   <Box
                     sx={{
@@ -487,7 +487,7 @@ const Dashboard = () => {
             }}
           >
             <Typography variant="body2" sx={{ color: colors.text.primary }}>
-              {`${payload[0].name}: pkr ${payload[0].value.toLocaleString()}`}
+              {`${payload[0].name}: ₹ ${payload[0].value.toLocaleString()}`}
             </Typography>
           </Box>
         );
@@ -633,7 +633,7 @@ const Dashboard = () => {
                   gap: '4px',
                 }}
               >
-                {`${entry.name}: pkr ${entry.value.toLocaleString()}`}
+                {`${entry.name}: ₹ ${entry.value.toLocaleString()}`}
               </Typography>
             ))}
           </Box>
@@ -657,13 +657,13 @@ const Dashboard = () => {
                   tick={{ fontFamily: 'Inter, sans-serif' }}
                   tickFormatter={(value) => {
                     if (value < 1000) {
-                      return `pkr ${value}`;
+                      return `₹ ${value}`;
                     } else if (value < 100000) {
-                      return `pkr ${(value / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+                      return `₹ ${(value / 1000).toFixed(1).replace(/\.0$/, '')}k`;
                     } else if (value < 10000000) {
-                      return `pkr ${(value / 100000).toFixed(1).replace(/\.0$/, '')}L`;
+                      return `₹ ${(value / 100000).toFixed(1).replace(/\.0$/, '')}L`;
                     } else {
-                      return `pkr ${(value / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
+                      return `₹ ${(value / 10000000).toFixed(1).replace(/\.0$/, '')}Cr`;
                     }
                   }}
                 />
@@ -748,7 +748,7 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6} md={3}>
             <StatCard
               title="Total Balance"
-              value={`pkr ${stats?.totalUserBalance?.toLocaleString() || 0}`}
+              value={`₹ ${stats?.totalUserBalance?.toLocaleString() || 0}`}
               color={colors.warning}
               icon={BalanceIcon}
               subtitle="Current holdings"

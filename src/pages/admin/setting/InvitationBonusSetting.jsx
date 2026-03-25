@@ -397,8 +397,8 @@ const InvitationBonusSetting = () => {
                       <TableRow key={record.id}>
                         <StyledTableCell>{index + 1}</StyledTableCell>
                         <StyledTableCell>{record.requiredReferrals}</StyledTableCell>
-                        <StyledTableCell>pkr {record.minDepositAmount}</StyledTableCell>
-                        <StyledTableCell>pkr {record.bonusAmount}</StyledTableCell>
+                        <StyledTableCell>₹ {record.minDepositAmount}</StyledTableCell>
+                        <StyledTableCell>₹ {record.bonusAmount}</StyledTableCell>
                         <StyledTableCell>
                           <EditButton
                             variant="outlined"

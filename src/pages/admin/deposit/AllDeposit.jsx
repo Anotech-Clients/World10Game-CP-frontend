@@ -217,7 +217,7 @@ function AllDeposits() {
     };
 
     const formatAmount = (amount) => {
-        return `pkr ${Number(amount).toLocaleString('en-IN')}`;
+        return `₹ ${Number(amount).toLocaleString('en-IN')}`;
     };
 
     return (

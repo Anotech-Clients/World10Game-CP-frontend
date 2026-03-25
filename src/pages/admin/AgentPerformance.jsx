@@ -177,7 +177,7 @@ function AgentPerformance() {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'pkr',
+      currency: '₹',
       maximumFractionDigits: 0,
     }).format(value);
   };
@@ -420,9 +420,9 @@ function AgentPerformance() {
                         yAxisId="left"
                         orientation="left"
                         tick={{ fontFamily: 'Inter', fontSize: isMobile ? 10 : 12, fill: '#94a3b8' }}
-                        tickFormatter={(value) => `pkr ${value / 1000}k`}
+                        tickFormatter={(value) => `₹ ${value / 1000}k`}
                         label={{
-                          value: 'Amount (pkr )',
+                          value: 'Amount (₹ )',
                           angle: -90,
                           position: 'insideLeft',
                           fontFamily: 'Inter',

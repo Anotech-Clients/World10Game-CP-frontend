@@ -411,7 +411,7 @@ const WithdrawalLimitSetting = () => {
                         mr: 0.5,
                       }}
                     >
-                      pkr 
+                      ₹ 
                     </Typography>
                   ),
                 }}
@@ -435,7 +435,7 @@ const WithdrawalLimitSetting = () => {
                         mr: 0.5,
                       }}
                     >
-                      pkr 
+                      ₹ 
                     </Typography>
                   ),
                 }}

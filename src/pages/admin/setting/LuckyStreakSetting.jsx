@@ -295,10 +295,10 @@ const LuckyStreakSetting = () => {
                                 streakRules.map((rule) => (
                                     <StyledTableRow key={rule.id}>
                                         <StyledTableCell>
-                                            pkr {typeof rule.rechargeAmount === 'number' ? rule.rechargeAmount.toFixed(2) : rule.rechargeAmount}
+                                            ₹ {typeof rule.rechargeAmount === 'number' ? rule.rechargeAmount.toFixed(2) : rule.rechargeAmount}
                                         </StyledTableCell>
                                         <StyledTableCell>
-                                            pkr {typeof rule.rewardAmount === 'number' ? rule.rewardAmount.toFixed(2) : rule.rewardAmount}
+                                            ₹ {typeof rule.rewardAmount === 'number' ? rule.rewardAmount.toFixed(2) : rule.rewardAmount}
                                         </StyledTableCell>
                                         <StyledTableCell align="right">
                                             <IconButton

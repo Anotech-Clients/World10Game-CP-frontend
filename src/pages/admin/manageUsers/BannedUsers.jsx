@@ -399,7 +399,7 @@ const BannedUsers = () => {
                                             </TableCell>
                                             <TableCell align="right">
                                                 <Typography sx={{ fontSize: "14px", color: "#f8fafc", fontWeight: 500 }}>
-                                                    pkr {Number(user.walletBalance).toLocaleString("en-IN")}
+                                                    ₹ {Number(user.walletBalance).toLocaleString("en-IN")}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell align="center">

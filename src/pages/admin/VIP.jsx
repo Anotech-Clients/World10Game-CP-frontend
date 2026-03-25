@@ -367,11 +367,11 @@ const VIP = () => {
           />
           <TextField
             fullWidth
-            label="Minimum Betting Amount (pkr)"
+            label="Minimum Betting Amount (₹)"
             type="number"
-            onFocus={() => setFocusedField('Minimum Betting Amount (pkr)')}
+            onFocus={() => setFocusedField('Minimum Betting Amount (₹)')}
             onBlur={() => setFocusedField(null)}
-            autoFocus={focusedField === 'Minimum Betting Amount (pkr)'}
+            autoFocus={focusedField === 'Minimum Betting Amount (₹)'}
             value={formData.minimumBettingAmount}
             onChange={(e) => setFormData({ ...formData, minimumBettingAmount: e.target.value })}
             required
@@ -386,11 +386,11 @@ const VIP = () => {
           />
           <TextField
             fullWidth
-            label="One-Time Bonus (pkr)"
+            label="One-Time Bonus (₹)"
             type="number"
-            onFocus={() => setFocusedField('One-Time Bonus (pkr)')}
+            onFocus={() => setFocusedField('One-Time Bonus (₹)')}
             onBlur={() => setFocusedField(null)}
-            autoFocus={focusedField === 'One-Time Bonus (pkr)'}
+            autoFocus={focusedField === 'One-Time Bonus (₹)'}
             value={formData.oneTimeBonus}
             onChange={(e) => setFormData({ ...formData, oneTimeBonus: e.target.value })}
             required
@@ -405,11 +405,11 @@ const VIP = () => {
           />
           <TextField
             fullWidth
-            label="Monthly Bonus (pkr)"
+            label="Monthly Bonus (₹)"
             type="number"
-            onFocus={() => setFocusedField('Monthly Bonus (pkr)')}
+            onFocus={() => setFocusedField('Monthly Bonus (₹)')}
             onBlur={() => setFocusedField(null)}
-            autoFocus={focusedField === 'Monthly Bonus (pkr)'}
+            autoFocus={focusedField === 'Monthly Bonus (₹)'}
             value={formData.monthlyBonus}
             onChange={(e) => setFormData({ ...formData, monthlyBonus: e.target.value })}
             required
@@ -544,11 +544,11 @@ const VIP = () => {
                     </TableCell>
                     <TableCell>
                       <Typography color="primary.main" fontWeight={500}>
-                        pkr {rule.minimumBettingAmount.toLocaleString()}
+                        ₹ {rule.minimumBettingAmount.toLocaleString()}
                       </Typography>
                     </TableCell>
-                    <TableCell>pkr {rule.oneTimeBonus.toLocaleString()}</TableCell>
-                    <TableCell>pkr {rule.monthlyBonus.toLocaleString()}</TableCell>
+                    <TableCell>₹ {rule.oneTimeBonus.toLocaleString()}</TableCell>
+                    <TableCell>₹ {rule.monthlyBonus.toLocaleString()}</TableCell>
                     <TableCell>{rule.rebatePercentage}%</TableCell>
                     <TableCell align="right">
                       <Tooltip title="Edit Rule">

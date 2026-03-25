@@ -58,8 +58,8 @@ export const GameStatsList = ({ gameStats }) => {
                                 />
                             </TableCell>
                             <TableCell align="right">{game.totalBets}</TableCell>
-                            <TableCell align="right">pkr  {game.totalInvested.toFixed(2)}</TableCell>
-                            <TableCell align="right">pkr  {game.totalWon.toFixed(2)}</TableCell>
+                            <TableCell align="right">₹  {game.totalInvested.toFixed(2)}</TableCell>
+                            <TableCell align="right">₹  {game.totalWon.toFixed(2)}</TableCell>
                             <TableCell align="right">
                                 <Chip
                                     label={`${game.winRate.toFixed(2)}%`}
@@ -78,7 +78,7 @@ export const GameStatsList = ({ gameStats }) => {
                                     fontWeight: 500
                                 }}
                             >
-                                pkr {game.netProfitLossAdmin.toFixed(2)}
+                                ₹ {game.netProfitLossAdmin.toFixed(2)}
                             </TableCell>
                             <TableCell 
                                 align="right"

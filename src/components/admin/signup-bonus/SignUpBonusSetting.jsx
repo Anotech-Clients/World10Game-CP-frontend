@@ -215,7 +215,7 @@ const SignUpBonusSetting = () => {
           onChange={(e) => setDefaultWalletAmount(e.target.value)}
           type="number"
           InputProps={{
-            endAdornment: <InputAdornment position="end">pkr  </InputAdornment>,
+            endAdornment: <InputAdornment position="end">₹  </InputAdornment>,
           }}
           sx={{
             "& .MuiOutlinedInput-root": {

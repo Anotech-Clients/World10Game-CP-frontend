@@ -645,7 +645,7 @@ function PendingWithdraws() {
               <TableRow>
                 <StyledTableCell>Transaction ID</StyledTableCell>
                 <StyledTableCell>User ID</StyledTableCell>
-                <StyledTableCell>Amount (pkr )</StyledTableCell>
+                <StyledTableCell>Amount (₹ )</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>User Mobile</StyledTableCell>
                 <StyledTableCell>Status</StyledTableCell>
@@ -712,7 +712,7 @@ function PendingWithdraws() {
                     fontWeight: 600,
                     color: colorSystem.success.main,
                   }}>
-                    pkr {Number(withdrawal.withdrawAmount).toLocaleString('en-IN', {
+                    ₹ {Number(withdrawal.withdrawAmount).toLocaleString('en-IN', {
                       maximumFractionDigits: 2,
                       minimumFractionDigits: 2
                     })}
@@ -891,7 +891,7 @@ function PendingWithdraws() {
                     color: colorSystem.primary.main,
                   }}
                 >
-                  pkr {Number(selectedWithdrawal.withdrawAmount).toLocaleString('en-IN', {
+                  ₹ {Number(selectedWithdrawal.withdrawAmount).toLocaleString('en-IN', {
                     maximumFractionDigits: 2,
                     minimumFractionDigits: 2
                   })}

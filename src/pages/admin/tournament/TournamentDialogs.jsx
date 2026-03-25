@@ -212,7 +212,7 @@ export const CreateTournamentDialog = ({
                 </Grid>
                 <Grid item xs={3}>
                   <TextField
-                    label="Amount (pkr )"
+                    label="Amount (₹ )"
                     type="number"
                     fullWidth
                     value={reward.rewardAmount}

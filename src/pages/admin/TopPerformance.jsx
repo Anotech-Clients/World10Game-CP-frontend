@@ -248,7 +248,7 @@ function TopPerformance() {
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
-            currency: 'pkr',
+            currency: '₹',
             maximumFractionDigits: 0
         }).format(amount);
     };

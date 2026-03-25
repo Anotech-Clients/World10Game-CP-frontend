@@ -131,7 +131,7 @@ const TournamentTable = ({
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                    pkr {Number(tournament.totalPrizePool || 0).toLocaleString("en-IN")}
+                    ₹ {Number(tournament.totalPrizePool || 0).toLocaleString("en-IN")}
                   </Typography>
                 </TableCell>
                 <TableCell>

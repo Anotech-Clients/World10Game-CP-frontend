@@ -117,8 +117,8 @@ const UserActivityTab = ({ axiosInstance, showSnackbar }) => {
                     {activity.currentRank ? `#${activity.currentRank}` : "-"}
                   </TableCell>
                   <TableCell>{Number(activity.totalScore || 0).toLocaleString()}</TableCell>
-                  <TableCell>pkr {Number(activity.totalDeposits || 0).toLocaleString()}</TableCell>
-                  <TableCell>pkr {Number(activity.totalBets || 0).toLocaleString()}</TableCell>
+                  <TableCell>₹ {Number(activity.totalDeposits || 0).toLocaleString()}</TableCell>
+                  <TableCell>₹ {Number(activity.totalBets || 0).toLocaleString()}</TableCell>
                   <TableCell>{new Date(activity.joinedAt).toLocaleDateString()}</TableCell>
                 </TableRow>
               ))

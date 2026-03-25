@@ -451,7 +451,7 @@ const LuckySpinSetting = () => {
                             rules.map((rule) => (
                                 <TableRow key={rule.id} hover>
                                     {/* <StyledTableCell>{rule.id}</StyledTableCell> */}
-                                    <StyledTableCell>pkr {rule.minDepositAmount}</StyledTableCell>
+                                    <StyledTableCell>₹ {rule.minDepositAmount}</StyledTableCell>
                                     <StyledTableCell>{rule.spinChances}</StyledTableCell>
                                     <StyledTableCell>
                                         <Chip
@@ -539,7 +539,7 @@ const LuckySpinSetting = () => {
                                 <TableRow key={reward.id} hover>
                                     {/* <StyledTableCell>{reward.id}</StyledTableCell> */}
                                     <StyledTableCell>{reward.position}</StyledTableCell>
-                                    <StyledTableCell>pkr {reward.rewardAmount}</StyledTableCell>
+                                    <StyledTableCell>₹ {reward.rewardAmount}</StyledTableCell>
                                     <StyledTableCell>
                                         <Chip
                                             label={reward.isDefault ? 'Default' : 'Reward'}
@@ -674,7 +674,7 @@ const LuckySpinSetting = () => {
                             autoFocus
                             margin="dense"
                             name="minDepositAmount"
-                            label="Minimum Deposit Amount (pkr )"
+                            label="Minimum Deposit Amount (₹ )"
                             type="number"
                             fullWidth
                             value={ruleForm.minDepositAmount}
@@ -760,7 +760,7 @@ const LuckySpinSetting = () => {
                         <TextField
                             margin="dense"
                             name="rewardAmount"
-                            label="Reward Amount (pkr )"
+                            label="Reward Amount (₹ )"
                             type="number"
                             fullWidth
                             value={rewardForm.rewardAmount}

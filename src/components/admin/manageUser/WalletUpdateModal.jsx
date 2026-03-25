@@ -234,7 +234,7 @@ const WalletUpdateModal = ({ open, onClose, userId }) => {
                   InputProps={{
                     startAdornment: (
                       <Typography sx={{ color: 'grey.600', mr: 1 }}>
-                        pkr 
+                        ₹ 
                       </Typography>
                     ),
                   }}

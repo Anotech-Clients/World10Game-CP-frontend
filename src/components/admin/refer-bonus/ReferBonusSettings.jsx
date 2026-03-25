@@ -222,7 +222,7 @@ const ReferBonusSettings = () => {
                         onChange={(e) => setMinimumDepositAmount(e.target.value)}
                         type="number"
                         InputProps={{
-                            endAdornment: <InputAdornment position="end">pkr  </InputAdornment>,
+                            endAdornment: <InputAdornment position="end">₹  </InputAdornment>,
                         }}
                         sx={{
                             '& .MuiOutlinedInput-root': {
@@ -252,7 +252,7 @@ const ReferBonusSettings = () => {
                         onChange={(e) => setReferBonusAmount(e.target.value)}
                         type="number"
                         InputProps={{
-                            endAdornment: <InputAdornment position="end">pkr </InputAdornment>,
+                            endAdornment: <InputAdornment position="end">₹ </InputAdornment>,
                         }}
                         sx={{
                             '& .MuiOutlinedInput-root': {
