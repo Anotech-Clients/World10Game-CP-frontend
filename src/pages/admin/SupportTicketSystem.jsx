@@ -101,7 +101,7 @@ const darkTheme = createTheme({
 // Global styles wrapper
 const GlobalStyles = styled('div')({
     '*': {
-        fontFamily: 'Inter, sans- ',
+        fontFamily: 'Inter, sans-serif !important',
         '&::-webkit-scrollbar': {
             width: '6px',
             height: '6px'

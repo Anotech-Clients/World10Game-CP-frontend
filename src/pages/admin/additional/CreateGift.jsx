@@ -757,7 +757,7 @@ const CreateGift = () => {
                         </Stack>
                       </TableCell>
                       <TableCell align="right" sx={styles.tableCell}>
-                        ₹{coupon.discount}
+                        pkr {coupon.discount}
                       </TableCell>
                       <TableCell align="right" sx={styles.tableCell}>
                         {coupon.redemptionLimit}

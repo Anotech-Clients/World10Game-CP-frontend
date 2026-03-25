@@ -138,16 +138,16 @@ const LeaderboardView = ({
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      ₹{Number(entry.totalDeposits || 0).toLocaleString("en-IN")}
+                      pkr {Number(entry.totalDeposits || 0).toLocaleString("en-IN")}
                     </TableCell>
                     <TableCell>
-                      ₹{Number(entry.totalBets || 0).toLocaleString("en-IN")}
+                      pkr {Number(entry.totalBets || 0).toLocaleString("en-IN")}
                     </TableCell>
                     <TableCell>
-                      ₹{Number(entry.wingoBets || 0).toLocaleString("en-IN")}
+                      pkr {Number(entry.wingoBets || 0).toLocaleString("en-IN")}
                     </TableCell>
                     <TableCell>
-                      ₹{Number(entry.k3Bets || 0).toLocaleString("en-IN")}
+                      pkr {Number(entry.k3Bets || 0).toLocaleString("en-IN")}
                     </TableCell>
                     <TableCell>
                       <Tooltip title="Disqualify User">

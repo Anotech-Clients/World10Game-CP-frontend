@@ -46,7 +46,8 @@ import {
 import { domain } from "../../utils/Secret";
 import { useAuth } from "../../context/AuthContext";
 import dayjs from 'dayjs';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+// import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 // Dark theme
 const darkTheme = createTheme({
@@ -129,9 +130,9 @@ const getTypographyStyles = (isMobile) => ({
 
 // Base styles with Inter font
 const globalStyles = {
-  fontFamily: "Inter, sans- ",
+  fontFamily: "Inter, sans-serif !important",
   "& *": {
-    fontFamily: "Inter, sans- ",
+    fontFamily: "Inter, sans-serif !important",
   },
 };
 
@@ -526,7 +527,7 @@ const CreateSalary = () => {
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              <CurrencyRupeeIcon sx={{ fontSize: '30px', color: '#fff' }} />
+              <AccountBalanceWalletIcon sx={{ fontSize: '30px', color: '#fff' }} />
             </Box>
 
             <Typography
@@ -656,7 +657,7 @@ const CreateSalary = () => {
                           justifyContent: 'center',
                           borderRadius: '8px'
                         }}>
-                          <CurrencyRupeeIcon sx={{ color: '#43a047' }} />
+                          <AccountBalanceWalletIcon sx={{ color: '#43a047' }} />
                         </Box>
                       ),
                     }}
@@ -1206,7 +1207,7 @@ const CreateSalary = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
               <StatCard>
-                <CurrencyRupeeIcon sx={{ fontSize: 40, color: colors.primary, mb: 2 }} />
+                <AccountBalanceWalletIcon sx={{ fontSize: 40, color: colors.primary, mb: 2 }} />
                 <Typography
                   variant="h6"
                   gutterBottom
@@ -1298,7 +1299,7 @@ const CreateSalary = () => {
         {/* Salary Rules Table */}
         <FormCard elevation={0}>
           <Box display="flex" alignItems="center" mb={4}>
-            <CurrencyRupeeIcon sx={{ fontSize: 32, color: colors.primary }} />
+            <AccountBalanceWalletIcon sx={{ fontSize: 32, color: colors.primary }} />
             <Typography
               variant="h4"
               fontWeight={600}

@@ -298,7 +298,7 @@ const ApiTransaction = () => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "INR",
+      currency: "pkr",
       minimumFractionDigits: 2,
     }).format(amount || 0);
   };

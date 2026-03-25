@@ -241,7 +241,7 @@ function PendingDepositRequest() {
               </TableCell>
               <TableCell>
                 <Typography sx={{ fontWeight: 600, color: '#059669' }}>
-                  ₹{Number(deposit.depositAmount).toLocaleString('en-IN')}
+                  pkr {Number(deposit.depositAmount).toLocaleString('en-IN')}
                 </Typography>
               </TableCell>
               <TableCell>
@@ -296,7 +296,7 @@ function PendingDepositRequest() {
         <TableRow>
           <StyledTableCell>Deposit ID</StyledTableCell>
           <StyledTableCell>User Details</StyledTableCell>
-          <StyledTableCell>Amount (₹)</StyledTableCell>
+          <StyledTableCell>Amount (pkr )</StyledTableCell>
           <StyledTableCell>USDT Details</StyledTableCell>
           <StyledTableCell>Date & Time</StyledTableCell>
           <StyledTableCell>TX Hash/UTR</StyledTableCell>
@@ -339,7 +339,7 @@ function PendingDepositRequest() {
               </TableCell>
               <TableCell>
                 <Typography sx={{ fontWeight: 600, color: '#059669' }}>
-                  ₹{Number(deposit.depositAmount).toLocaleString('en-IN')}
+                  pkr {Number(deposit.depositAmount).toLocaleString('en-IN')}
                 </Typography>
               </TableCell>
               <TableCell>
@@ -512,14 +512,14 @@ function PendingDepositRequest() {
                     <strong>User:</strong> {selectedDeposit?.user?.userName} (ID: {selectedDeposit?.userId})
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                    <strong>Amount:</strong> ₹{Number(selectedDeposit?.depositAmount).toLocaleString('en-IN')}
+                    <strong>Amount:</strong> pkr {Number(selectedDeposit?.depositAmount).toLocaleString('en-IN')}
                   </Typography>
                   {activeTab === 1 && selectedDeposit?.remarks && (
                     <Typography variant="body2" sx={{ color: 'text.primary' }}>
                       <strong>USDT Details:</strong> {selectedDeposit?.remarks}
                     </Typography>
                   )}
-                  <Typography variant="body2" sx={{ color: 'text.primary' }}>
+                  <Typography variant="body2" sx={{ color: 'text.primary' , wordBreak: 'break-all' }}>
                     <strong>{activeTab === 0 ? 'UTR' : 'TX Hash/UTR'}:</strong> {selectedDeposit?.utrNumber || 'Not provided'}
                   </Typography>
                 </Stack>

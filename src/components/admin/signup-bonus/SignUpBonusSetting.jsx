@@ -149,7 +149,7 @@ const SignUpBonusSetting = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      {/* <Paper
+      <Paper
         elevation={0}
         sx={{
           p: { xs: 2, sm: 3, md: 4 },
@@ -215,7 +215,7 @@ const SignUpBonusSetting = () => {
           onChange={(e) => setDefaultWalletAmount(e.target.value)}
           type="number"
           InputProps={{
-            endAdornment: <InputAdornment position="end">₹</InputAdornment>,
+            endAdornment: <InputAdornment position="end">pkr  </InputAdornment>,
           }}
           sx={{
             "& .MuiOutlinedInput-root": {
@@ -339,7 +339,7 @@ const SignUpBonusSetting = () => {
           </Alert>
         </Fade>
       )}
-      </Paper> */}
+      </Paper>
     </ThemeProvider>
   );
 };

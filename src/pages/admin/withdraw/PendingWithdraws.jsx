@@ -43,8 +43,7 @@ import {
   Search,
   ContentCopy,
   FilterList,
-  Clear,
-  AccountBalanceWallet
+  Clear
 } from '@mui/icons-material';
 
 // Dark theme color system
@@ -622,12 +621,6 @@ function PendingWithdraws() {
             value="BANK_TRANSFER"
           />
           <StyledTab
-            icon={<AccountBalanceWallet />}
-            iconPosition="start"
-            label="UPI"
-            value="UPI"
-          />
-          <StyledTab
             icon={<CurrencyBitcoin />}
             iconPosition="start"
             label="USDT"
@@ -652,7 +645,7 @@ function PendingWithdraws() {
               <TableRow>
                 <StyledTableCell>Transaction ID</StyledTableCell>
                 <StyledTableCell>User ID</StyledTableCell>
-                <StyledTableCell>Amount (₹)</StyledTableCell>
+                <StyledTableCell>Amount (pkr )</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>User Mobile</StyledTableCell>
                 <StyledTableCell>Status</StyledTableCell>
@@ -719,7 +712,7 @@ function PendingWithdraws() {
                     fontWeight: 600,
                     color: colorSystem.success.main,
                   }}>
-                    ₹{Number(withdrawal.withdrawAmount).toLocaleString('en-IN', {
+                    pkr {Number(withdrawal.withdrawAmount).toLocaleString('en-IN', {
                       maximumFractionDigits: 2,
                       minimumFractionDigits: 2
                     })}
@@ -898,7 +891,7 @@ function PendingWithdraws() {
                     color: colorSystem.primary.main,
                   }}
                 >
-                  ₹{Number(selectedWithdrawal.withdrawAmount).toLocaleString('en-IN', {
+                  pkr {Number(selectedWithdrawal.withdrawAmount).toLocaleString('en-IN', {
                     maximumFractionDigits: 2,
                     minimumFractionDigits: 2
                   })}
@@ -1014,191 +1007,6 @@ function PendingWithdraws() {
                         {selectedWithdrawal.paymentDetails.bankDetails.accountType}
                       </DetailValue>
                     </DetailRow>
-                  </Paper>
-                </Box>
-              )}
-
-              {selectedWithdrawal.withdrawMethod === 'UPI' && selectedWithdrawal.paymentDetails?.upiDetails && (
-                <Box>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: colorSystem.text.primary,
-                      mb: 2
-                    }}
-                  >
-                    UPI Details
-                  </Typography>
-
-                  <Paper
-                    sx={{
-                      p: 2,
-                      mb: 3,
-                      backgroundColor: colorSystem.primary[50],
-                      border: `1px solid ${colorSystem.border}`,
-                      borderRadius: '12px'
-                    }}
-                  >
-                    <DetailRow>
-                      <DetailLabel>UPI ID:</DetailLabel>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <DetailValue>
-                          {selectedWithdrawal.paymentDetails.upiDetails.upiAddress || 'N/A'}
-                        </DetailValue>
-                        {selectedWithdrawal.paymentDetails.upiDetails.upiAddress && (
-                          <Tooltip title="Copy UPI ID">
-                            <IconButton
-                              size="small"
-                              onClick={() => handleCopyToClipboard(selectedWithdrawal.paymentDetails.upiDetails.upiAddress)}
-                            >
-                              <ContentCopy fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                      </Box>
-                    </DetailRow>
-                    <DetailRow>
-                      <DetailLabel>UPI Name:</DetailLabel>
-                      <DetailValue>
-                        {selectedWithdrawal.paymentDetails.upiDetails.upiName || 'N/A'}
-                      </DetailValue>
-                    </DetailRow>
-                    <DetailRow>
-                      <DetailLabel>Provider:</DetailLabel>
-                      <DetailValue>
-                        <Chip
-                          label={selectedWithdrawal.paymentDetails.upiDetails.upiProvider || 'Unknown'}
-                          size="small"
-                          sx={{
-                            backgroundColor: colorSystem.success[50],
-                            color: colorSystem.success[700],
-                            fontWeight: 600,
-                            borderRadius: '6px'
-                          }}
-                        />
-                      </DetailValue>
-                    </DetailRow>
-                    {selectedWithdrawal.paymentDetails.upiDetails.isPrimary && (
-                      <DetailRow>
-                        <DetailLabel>Primary UPI:</DetailLabel>
-                        <DetailValue>
-                          <Chip
-                            label="Primary"
-                            size="small"
-                            icon={<CheckCircle />}
-                            sx={{
-                              backgroundColor: colorSystem.warning[50],
-                              color: colorSystem.warning[700],
-                              fontWeight: 600,
-                              borderRadius: '6px'
-                            }}
-                          />
-                        </DetailValue>
-                      </DetailRow>
-                    )}
-                  </Paper>
-                </Box>
-              )}
-
-              {selectedWithdrawal.withdrawMethod === 'UPI' && !selectedWithdrawal.paymentDetails?.upiDetails && (
-                <Box>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: colorSystem.text.primary,
-                      mb: 2
-                    }}
-                  >
-                    UPI Withdrawal Details
-                  </Typography>
-
-                  <Paper
-                    sx={{
-                      p: 3,
-                      mb: 3,
-                      backgroundColor: colorSystem.warning[50],
-                      border: `1px solid ${colorSystem.warning[200]}`,
-                      borderRadius: '12px'
-                    }}
-                  >
-                    <Box sx={{ textAlign: 'center', mb: 2 }}>
-                      <AccountBalanceWallet 
-                        sx={{ 
-                          fontSize: 48, 
-                          color: colorSystem.warning[600],
-                          mb: 1
-                        }} 
-                      />
-                      <Typography
-                        sx={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          color: colorSystem.warning[700],
-                          mb: 1
-                        }}
-                      >
-                        UPI Withdrawal Request
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '14px',
-                          color: colorSystem.warning[600],
-                          mb: 2
-                        }}
-                      >
-                        User requested withdrawal via UPI method
-                      </Typography>
-                    </Box>
-                    
-                    <DetailRow>
-                      <DetailLabel>Withdrawal Method:</DetailLabel>
-                      <DetailValue>
-                        <Chip
-                          label="UPI"
-                          size="small"
-                          icon={<AccountBalanceWallet />}
-                          sx={{
-                            backgroundColor: colorSystem.primary[50],
-                            color: colorSystem.primary[700],
-                            fontWeight: 600,
-                            borderRadius: '6px'
-                          }}
-                        />
-                      </DetailValue>
-                    </DetailRow>
-                    
-                    <DetailRow>
-                      <DetailLabel>Primary Method:</DetailLabel>
-                      <DetailValue>
-                        {selectedWithdrawal.paymentDetails?.primaryMethod || 'upiDetails'}
-                      </DetailValue>
-                    </DetailRow>
-                    
-                    <Box sx={{ 
-                      mt: 2, 
-                      p: 2, 
-                      backgroundColor: colorSystem.primary[50],
-                      borderRadius: '8px',
-                      border: `1px solid ${colorSystem.primary[200]}`
-                    }}>
-                      <Typography
-                        sx={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '13px',
-                          color: colorSystem.primary[700],
-                          fontStyle: 'italic',
-                          textAlign: 'center'
-                        }}
-                      >
-                        💡 Note: UPI details will be populated from user's primary UPI when processing this withdrawal
-                      </Typography>
-                    </Box>
                   </Paper>
                 </Box>
               )}

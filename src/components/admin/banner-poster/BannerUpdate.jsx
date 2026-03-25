@@ -7,10 +7,9 @@ import { useAuth } from '../../../context/AuthContext'
 const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(3),
     margin: '1rem auto',
-    color: "white",
     boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     borderRadius: '12px',
-    backgroundColor: '#1e293b',
+    backgroundColor: '#FFFFFF',
     [theme.breakpoints.up('sm')]: {
         padding: theme.spacing(3),
         margin: '2rem auto',
@@ -150,7 +149,7 @@ const BannerUpdate = () => {
                 sx={{
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 600,
-                    color: '#ffffff',
+                    color: '#1E293B',
                     fontSize: { xs: '1.25rem', sm: '1.5rem' },
                     mb: 2
                 }}>
@@ -171,7 +170,7 @@ const BannerUpdate = () => {
                 }}
             >
                 <FormControl fullWidth sx={{ mb: 3 }}>
-                    <InputLabel id="banner-type-label" sx={{ color: "white"}}>Banner Type</InputLabel>
+                    <InputLabel id="banner-type-label">Banner Type</InputLabel>
                     <Select
                         labelId="banner-type-label"
                         id="banner-type-select"
@@ -181,12 +180,11 @@ const BannerUpdate = () => {
                         sx={{
                             fontFamily: 'Inter, sans-serif',
                             borderRadius: 2,
-                            color: "white",
                             '& .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'rgba(50, 57, 95, 1)',
+                                borderColor: 'rgba(7, 18, 81, 0.2)',
                             },
                             '&:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'rgba(88, 91, 109, 1)',
+                                borderColor: 'rgba(7, 18, 81, 0.3)',
                             },
                             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                 borderColor: '#071251',
@@ -215,7 +213,7 @@ const BannerUpdate = () => {
                                 transition: 'all 0.3s ease',
                                 backgroundColor: 'rgba(7,18,81,0.02)',
                                 '&:hover': {
-                                    borderColor: errors[selectedBannerType] ? 'error.main' : "#3b4788ff",
+                                    borderColor: errors[selectedBannerType] ? 'error.main' : "#071251",
                                     backgroundColor: 'rgba(7,18,81,0.04)',
                                     transform: 'scale(1.01)',
                                 },
@@ -243,7 +241,7 @@ const BannerUpdate = () => {
                                         size={40}
                                         thickness={4}
                                         sx={{
-                                            color: "#ffffff",
+                                            color: "#071251",
                                             '& .MuiCircularProgress-circle': {
                                                 strokeLinecap: 'round',
                                             },
@@ -262,14 +260,14 @@ const BannerUpdate = () => {
                             <CloudUploadIcon
                                 sx={{
                                     fontSize: 48,
-                                    color: errors[selectedBannerType] ? "error.main" : "#ffffff",
+                                    color: errors[selectedBannerType] ? "error.main" : "#071251",
                                     mb: 2,
                                     opacity: 0.8,
                                 }}
                             />
                             <Typography
                                 sx={{
-                                    color: errors[selectedBannerType] ? "error.main" : "white",
+                                    color: errors[selectedBannerType] ? "error.main" : "text.secondary",
                                     fontFamily: 'Inter, sans-serif',
                                     fontSize: '0.875rem',
                                     fontWeight: 500,

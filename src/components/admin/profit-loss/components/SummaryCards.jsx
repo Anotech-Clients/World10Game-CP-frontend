@@ -84,11 +84,11 @@ export const SummaryCards = ({ summary }) => {
               </Typography>
             </Box>
             <Typography variant="h5" sx={{ mb: 1, fontWeight: 600, color: '#6366f1' }}>
-              ₹{summary.totalInvested.toFixed(2)}
+              pkr  {summary.totalInvested.toFixed(2)}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body2" sx={{ color: '#94a3b8' }}>
-                Avg Bet: ₹{summary.averageBetAmount.toFixed(2)}
+                Avg Bet: pkr  {summary.averageBetAmount.toFixed(2)}
               </Typography>
             </Box>
           </CardContent>
@@ -172,7 +172,7 @@ export const SummaryCards = ({ summary }) => {
                 gap: 1
               }}
             >
-              ₹{summary.netProfitLossAdmin.toFixed(2)}
+              pkr {summary.netProfitLossAdmin.toFixed(2)}
               {summary.netProfitLossAdmin >= 0 ?
                 <TrendingUp fontSize="small" /> :
                 <TrendingDown fontSize="small" />

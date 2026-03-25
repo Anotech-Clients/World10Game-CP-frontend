@@ -155,7 +155,7 @@ const ReferBonusSettings = () => {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            {/* <Paper
+            <Paper
                 elevation={0}
                 sx={{
                     p: { xs: 2, sm: 3, md: 4 },
@@ -222,7 +222,7 @@ const ReferBonusSettings = () => {
                         onChange={(e) => setMinimumDepositAmount(e.target.value)}
                         type="number"
                         InputProps={{
-                            endAdornment: <InputAdornment position="end">₹</InputAdornment>,
+                            endAdornment: <InputAdornment position="end">pkr  </InputAdornment>,
                         }}
                         sx={{
                             '& .MuiOutlinedInput-root': {
@@ -252,7 +252,7 @@ const ReferBonusSettings = () => {
                         onChange={(e) => setReferBonusAmount(e.target.value)}
                         type="number"
                         InputProps={{
-                            endAdornment: <InputAdornment position="end">₹</InputAdornment>,
+                            endAdornment: <InputAdornment position="end">pkr </InputAdornment>,
                         }}
                         sx={{
                             '& .MuiOutlinedInput-root': {
@@ -373,7 +373,7 @@ const ReferBonusSettings = () => {
                         </Alert>
                     </Fade>
                 )}
-            </Paper> */}
+            </Paper>
         </ThemeProvider>
     );
 };

@@ -9,7 +9,7 @@ const BannerPosterUpdate = () => {
     return (
         <Box sx={{
             p: { xs: 2, sm: 3 },
-            backgroundColor: '#0f172a',
+            backgroundColor: '#F8FAFC',
             minHeight: '100vh'
         }}>
             <BannerUpdate />

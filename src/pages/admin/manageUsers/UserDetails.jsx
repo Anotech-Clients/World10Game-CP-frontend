@@ -471,7 +471,7 @@ const TransactionHistory = ({ userId }) => {
                     {activeTab === 0 ? transaction.depositId : transaction.transactionId}
                   </TableCell>
                   <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
-                    ₹{activeTab === 0 ? transaction.depositAmount : transaction.withdrawAmount}
+                    pkr {activeTab === 0 ? transaction.depositAmount : transaction.withdrawAmount}
                   </TableCell>
                   <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
                     {activeTab === 0 ? transaction.depositMethod : transaction.withdrawMethod}
@@ -698,10 +698,10 @@ const BettingHistory = ({ userId }) => {
       }}
     >
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.periodId || '-'}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.betAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.betAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.multiplier || 1}x</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.tax || 0}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.actualBetAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.tax || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.actualBetAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
         {formatFivedBetType(bet.betType)}
       </TableCell>
@@ -727,7 +727,7 @@ const BettingHistory = ({ userId }) => {
           {bet.isWin ? 'Win' : 'Loss'}
         </Box>
       </TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.winAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.winAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{formatDate(bet.timestamp)}</TableCell>
     </TableRow>
   )
@@ -830,10 +830,10 @@ const BettingHistory = ({ userId }) => {
       }}
     >
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.periodId || '-'}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.betAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.betAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.multiplier || 1}x</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.tax || 0}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.actualBetAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.tax || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.actualBetAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.selectedItem || '-'}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{formatWingoResult(bet.result)}</TableCell>
       <TableCell>
@@ -852,7 +852,7 @@ const BettingHistory = ({ userId }) => {
           {bet.isWin ? 'Win' : 'Loss'}
         </Box>
       </TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.winAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.winAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{formatDate(bet.timestamp)}</TableCell>
     </TableRow>
   )
@@ -873,10 +873,10 @@ const BettingHistory = ({ userId }) => {
       }}
     >
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.periodId || '-'}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.betAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.betAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.multiplier || 1}x</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.tax || 0}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.actualBetAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.tax || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.actualBetAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
         {formatBetType(bet.betType)}
       </TableCell>
@@ -898,7 +898,7 @@ const BettingHistory = ({ userId }) => {
           {bet.isWin ? 'Win' : 'Loss'}
         </Box>
       </TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.winAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.winAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{formatDate(bet.timestamp)}</TableCell>
     </TableRow>
   )
@@ -920,10 +920,10 @@ const BettingHistory = ({ userId }) => {
       }}
     >
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.periodId || '-'}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.betAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.betAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{bet.multiplier || 1}x</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.tax || 0}</TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.actualBetAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.tax || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.actualBetAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
         {formatBetType(bet.selectedSection || 'NONE')}
       </TableCell>
@@ -945,7 +945,7 @@ const BettingHistory = ({ userId }) => {
           {bet.isWin ? 'Win' : 'Loss'}
         </Box>
       </TableCell>
-      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>₹{bet.winAmount || 0}</TableCell>
+      <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>pkr {bet.winAmount || 0}</TableCell>
       <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>{formatDate(bet.timestamp)}</TableCell>
     </TableRow>
   )
@@ -1257,7 +1257,7 @@ const BonusHistory = ({ userId }) => {
               fullWidth
               sx={{ color: '#f8fafc' }}
             >
-              {`Total Bonus: ₹${totalBonus}`}
+              {`Total Bonus: pkr ${totalBonus}`}
               </Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
@@ -1537,7 +1537,7 @@ const SubordinateCard = ({ title, icon, stats, gradient }) => {
                     fontSize: { xs: '0.75rem', sm: '0.875rem' }
                   }}
                 >
-                  ₹{stats.amount}
+                  pkr {stats.amount}
                 </Typography>
               </Stack>
             </Box>
@@ -1668,7 +1668,7 @@ const UserDetails = () => {
           <InfoCard
             icon={<WalletIcon />}
             title="Wallet Amount"
-            value={`₹${userData.personalInfo.walletBalance}`}
+            value={`pkr ${parseFloat(userData.personalInfo.walletBalance).toFixed(3)}`}
             color="#059669"
           />
         </Grid>
@@ -1781,10 +1781,10 @@ const UserDetails = () => {
                 }}
               >
                 Wallet Update
-              </Button>
+              </Button> */}
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Button
+              {/* <Button
                 fullWidth
                 variant="contained"
                 startIcon={<BlockIcon />}
@@ -2028,13 +2028,13 @@ const UserDetails = () => {
                           {commission.level}
                         </TableCell>
                         <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
-                          ₹{commission.depositCommission}
+                          pkr {commission.depositCommission}
                         </TableCell>
                         <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
-                          ₹{commission.betCommission}
+                          pkr {commission.betCommission}
                         </TableCell>
                         <TableCell sx={{ fontFamily: 'Inter, sans-serif', color: '#f8fafc' }}>
-                          ₹{commission.totalCommission}
+                          pkr {commission.totalCommission}
                         </TableCell>
                       </TableRow>
                     ))}

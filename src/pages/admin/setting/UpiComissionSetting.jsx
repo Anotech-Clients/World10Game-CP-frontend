@@ -25,6 +25,7 @@ import {
   InputAdornment,
   ThemeProvider,
   createTheme,
+  Divider,
 } from "@mui/material";
 import {
   CloudUpload as CloudUploadIcon,
@@ -219,6 +220,11 @@ const AdminSettings = () => {
       return;
     }
 
+     if (!upiForm.id && upiList.length >= 1) {
+    showNotification("Maximum 1 UPI payment method allowed", "error");
+    return;
+  }
+
     setUpiLoading(true);
 
     try {
@@ -330,6 +336,10 @@ const AdminSettings = () => {
       showNotification("TRX address is required", "error");
       return;
     }
+    if (!trxForm.id && trxList.length >= 1) {
+    showNotification("Maximum 1 TRX payment method allowed", "error");
+    return;
+  }
 
     setTrxLoading(true);
 
@@ -773,10 +783,10 @@ const AdminSettings = () => {
                     sx={{ bgcolor: "rgba(99, 102, 241, 0.15)", color: "#818cf8" }}
                   />
                 </Box>
+                {upiList.length < 1 && (
                 <Button
                   variant="contained"
                   startIcon={showUpiForm ? <CancelIcon /> : <AddIcon />}
-                  disabled={!showUpiForm && upiList.length >= 1}
                   onClick={() => {
                     if (showUpiForm) {
                       resetUpiForm();
@@ -794,6 +804,7 @@ const AdminSettings = () => {
                 >
                   {showUpiForm ? "Cancel" : "Add New UPI"}
                 </Button>
+                )}
               </Box>
 
               {/* UPI Form */}
@@ -909,7 +920,7 @@ const AdminSettings = () => {
                               src={upiImagePreview}
                               alt="UPI QR Preview"
                               sx={{
-                                mt: 2,
+                                  mt: 2,
                                 maxWidth: 200,
                                 maxHeight: 200,
                                 borderRadius: 2,
@@ -994,10 +1005,10 @@ const AdminSettings = () => {
                     sx={{ bgcolor: "rgba(99, 102, 241, 0.15)", color: "#818cf8" }}
                   />
                 </Box>
+                {trxList.length < 1 && (
                 <Button
                   variant="contained"
                   startIcon={showTrxForm ? <CancelIcon /> : <AddIcon />}
-                    disabled={!showTrxForm && trxList.length >= 1}
                   onClick={() => {
                     if (showTrxForm) {
                       resetTrxForm();
@@ -1015,6 +1026,7 @@ const AdminSettings = () => {
                 >
                   {showTrxForm ? "Cancel" : "Add New TRX"}
                 </Button>
+                )}
               </Box>
 
               {/* TRX Form */}
@@ -1341,21 +1353,13 @@ const AdminSettings = () => {
           {/* ======================== */}
           {/* OTHER SETTINGS COMPONENTS */}
           {/* ======================== */}
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <NeedToDepositSettings />
           </Grid>
 
           <Grid item xs={12}>
             <SignUpBonusSetting />
-          </Grid>
-
-          <Grid item xs={12}>
-            <DepositBonusSettings />
-          </Grid>
-
-          <Grid item xs={12}>
-            <ReferBonusSettings />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             <TelegramChannelManagement />

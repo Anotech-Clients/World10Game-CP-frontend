@@ -405,7 +405,7 @@ const ActiveUsers = () => {
                       </TableCell>
                       <TableCell align="right">
                         <Typography sx={{ fontSize: "14px", color: "#f8fafc", fontWeight: 500 }}>
-                          ₹{Number(user.walletBalance).toLocaleString("en-IN")}
+                          pkr {Number(user.walletBalance).toLocaleString("en-IN")}
                         </Typography>
                       </TableCell>
                       <TableCell align="center">

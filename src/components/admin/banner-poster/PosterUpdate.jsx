@@ -9,7 +9,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     margin: '1rem auto',
     boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     borderRadius: '12px',
-    backgroundColor: '#1e293b',
+    backgroundColor: '#FFFFFF',
     [theme.breakpoints.up('sm')]: {
         padding: theme.spacing(3),
         margin: '2rem auto',
@@ -74,7 +74,7 @@ const PosterUpdate = () => {
 
     const handlePosterSubmit = async (e) => {
         e.preventDefault()
-
+        
         if (!images[selectedPosterType]) {
             setErrors(prev => ({
                 ...prev,
@@ -108,13 +108,13 @@ const PosterUpdate = () => {
             })
 
             // console.log(`${selectedPosterType} poster updated successfully:`, response.data)
-
+            
             // Set success message
             setSuccessMessages(prev => ({
                 ...prev,
                 [selectedPosterType]: `${selectedPosterType} poster updated successfully!`
             }))
-
+            
             // Clear success message after 3 seconds
             setTimeout(() => {
                 setSuccessMessages(prev => {
@@ -123,7 +123,7 @@ const PosterUpdate = () => {
                     return newMessages
                 })
             }, 3000)
-
+            
         } catch (error) {
             console.error(`Error updating ${selectedPosterType} poster:`, error?.response?.data || error.message)
             setErrors(prev => ({
@@ -142,13 +142,13 @@ const PosterUpdate = () => {
                 sx={{
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 600,
-                    color: '#ffffff',
+                    color: '#1E293B',
                     fontSize: { xs: '1.25rem', sm: '1.5rem' },
                     mb: 2
                 }}>
                 Update Posters
             </Typography>
-
+            
             <Box
                 component="form"
                 onSubmit={handlePosterSubmit}
@@ -163,7 +163,7 @@ const PosterUpdate = () => {
                 }}
             >
                 <FormControl fullWidth sx={{ mb: 3 }}>
-                    <InputLabel id="poster-type-label" sx={{ color: "white"}}>Poster Type</InputLabel>
+                    <InputLabel id="poster-type-label">Poster Type</InputLabel>
                     <Select
                         labelId="poster-type-label"
                         id="poster-type-select"
@@ -173,12 +173,11 @@ const PosterUpdate = () => {
                         sx={{
                             fontFamily: 'Inter, sans-serif',
                             borderRadius: 2,
-                            color: "white",
                             '& .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'rgba(50, 57, 95, 1)',
+                                borderColor: 'rgba(7, 18, 81, 0.2)',
                             },
                             '&:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: 'rgba(88, 91, 109, 1)',
+                                borderColor: 'rgba(7, 18, 81, 0.3)',
                             },
                             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                                 borderColor: '#071251',
@@ -207,7 +206,7 @@ const PosterUpdate = () => {
                                 transition: 'all 0.3s ease',
                                 backgroundColor: 'rgba(7,18,81,0.02)',
                                 '&:hover': {
-                                    borderColor: errors[selectedPosterType] ? 'error.main' : "#ffffff",
+                                    borderColor: errors[selectedPosterType] ? 'error.main' : "#071251",
                                     backgroundColor: 'rgba(7,18,81,0.04)',
                                     transform: 'scale(1.01)',
                                 },
@@ -216,7 +215,7 @@ const PosterUpdate = () => {
                             onClick={() => document.getElementById("poster-upload").click()}
                         >
                             {loading && (
-                                <Box
+                                <Box 
                                     sx={{
                                         position: 'absolute',
                                         top: 0,
@@ -235,7 +234,7 @@ const PosterUpdate = () => {
                                         size={40}
                                         thickness={4}
                                         sx={{
-                                            color: "#ffffff",
+                                            color: "#071251",
                                             '& .MuiCircularProgress-circle': {
                                                 strokeLinecap: 'round',
                                             },
@@ -243,7 +242,7 @@ const PosterUpdate = () => {
                                     />
                                 </Box>
                             )}
-
+                            
                             <input
                                 id="poster-upload"
                                 type="file"
@@ -254,14 +253,14 @@ const PosterUpdate = () => {
                             <CloudUploadIcon
                                 sx={{
                                     fontSize: 48,
-                                    color: errors[selectedPosterType] ? "error.main" : "#ffffff",
+                                    color: errors[selectedPosterType] ? "error.main" : "#071251",
                                     mb: 2,
                                     opacity: 0.8,
                                 }}
                             />
                             <Typography
                                 sx={{
-                                    color: errors[selectedPosterType] ? "error.main" : "white",
+                                    color: errors[selectedPosterType] ? "error.main" : "text.secondary",
                                     fontFamily: 'Inter, sans-serif',
                                     fontSize: '0.875rem',
                                     fontWeight: 500,
@@ -269,7 +268,7 @@ const PosterUpdate = () => {
                             >
                                 Click to upload {posterTypes.find(p => p.value === selectedPosterType)?.label} poster
                             </Typography>
-
+                            
                             {imagePreviews[selectedPosterType] && (
                                 <Fade in={true} timeout={500}>
                                     <Box
@@ -285,11 +284,11 @@ const PosterUpdate = () => {
                                     />
                                 </Fade>
                             )}
-
+                            
                             {errors[selectedPosterType] && (
-                                <Typography
-                                    color="error"
-                                    sx={{
+                                <Typography 
+                                    color="error" 
+                                    sx={{ 
                                         mt: 2,
                                         fontSize: '0.75rem',
                                         fontFamily: 'Inter, sans-serif',
@@ -298,10 +297,10 @@ const PosterUpdate = () => {
                                     {errors[selectedPosterType]}
                                 </Typography>
                             )}
-
+                            
                             {successMessages[selectedPosterType] && (
-                                <Typography
-                                    sx={{
+                                <Typography 
+                                    sx={{ 
                                         mt: 2,
                                         color: 'success.main',
                                         fontSize: '0.75rem',

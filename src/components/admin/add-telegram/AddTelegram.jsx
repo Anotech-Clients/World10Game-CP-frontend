@@ -78,7 +78,7 @@ const TelegramChannelManagement = () => {
 
   const { axiosInstance } = useAuth();
 
-  // Fetch all telegram channels
+  // Fetch all WhatsApp Channels
   useEffect(() => {
     fetchChannels();
   }, []);
@@ -93,8 +93,8 @@ const TelegramChannelManagement = () => {
         setChannels(response.data);
       }
     } catch (err) {
-      showNotification("Failed to fetch telegram channels", "error");
-      console.error("Error fetching telegram channels:", err);
+      showNotification("Failed to fetch WhatsApp Channels", "error");
+      console.error("Error fetching WhatsApp Channels:", err);
     } finally {
       setLoading(false);
     }
@@ -121,7 +121,7 @@ const TelegramChannelManagement = () => {
             link: channelLink,
           }
         );
-        showNotification("Telegram channel updated successfully", "success");
+        showNotification("WhatsApp Channel updated successfully", "success");
       } else {
         // Create new channel
         await axiosInstance.post(
@@ -131,7 +131,7 @@ const TelegramChannelManagement = () => {
             link: channelLink,
           }
         );
-        showNotification("Telegram channel added successfully", "success");
+        showNotification("WhatsApp Channel added successfully", "success");
       }
       
       // Reset form and refresh data
@@ -167,11 +167,11 @@ const TelegramChannelManagement = () => {
       await axiosInstance.delete(
         `${domain}/api/additional/telegram-channel/delete-telegram/${channelToDelete.id}`
       );
-      showNotification("Telegram channel deleted successfully", "success");
+      showNotification("WhatsApp Channel deleted successfully", "success");
       fetchChannels();
     } catch (err) {
-      showNotification("Failed to delete telegram channel", "error");
-      console.error("Error deleting telegram channel:", err);
+      showNotification("Failed to delete WhatsApp Channel", "error");
+      console.error("Error deleting WhatsApp Channel:", err);
     } finally {
       setSubmitting(false);
       setDeleteDialogOpen(false);
@@ -267,8 +267,8 @@ const TelegramChannelManagement = () => {
           },
         }}
       >
-        Telegram Channel Management
-        <Tooltip title="Manage Telegram channels for user communication">
+        WhatsApp Channel Management
+        <Tooltip title="Manage WhatsApp Channels for user communication">
           <InfoOutlinedIcon
             sx={{ fontSize: 20, color: '#94a3b8', opacity: 0.9 }}
           />
@@ -441,7 +441,7 @@ const TelegramChannelManagement = () => {
             },
           }}
         >
-          No telegram channels added yet.
+          No WhatsApp Channels added yet.
         </Alert>
       ) : (
         <TableContainer
@@ -513,14 +513,14 @@ const TelegramChannelManagement = () => {
                   <TableCell sx={{ fontFamily: "Inter, sans-serif" }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       <LinkIcon
-                        sx={{ mr: 1, fontSize: 16, color: "#fff", opacity: 0.7 }}
+                        sx={{ mr: 1, fontSize: 16, color: "#ffffff", opacity: 0.7 }}
                       />
                       <a
                         href={channel.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          color: "#fff",
+                          color: "#ffffff",
                           textDecoration: "none",
                           "&:hover": {
                             textDecoration: "underline",
@@ -537,7 +537,7 @@ const TelegramChannelManagement = () => {
                         onClick={() => handleEdit(channel)}
                         size="small"
                         color="primary"
-                        sx={{ color: "#fff" }}
+                        sx={{ color: "#ffffff" }}
                       >
                         <EditIcon />
                       </IconButton>

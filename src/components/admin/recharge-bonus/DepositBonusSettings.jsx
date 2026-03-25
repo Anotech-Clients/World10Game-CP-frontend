@@ -144,7 +144,7 @@ const DepositBonusSettings = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      {/* <Paper
+      <Paper
         elevation={0}
         sx={{
           p: { xs: 2, sm: 3, md: 4 },
@@ -244,7 +244,7 @@ const DepositBonusSettings = () => {
                 }
               }}
             >
-              This percentage will be added as a bonus to all user deposits. Example: If set to 10%, a user depositing ₹100 will receive a ₹10 bonus.
+              This percentage will be added as a bonus to all user deposits. Example: If set to 10%, a user depositing pkr  100 will receive a pkr  10 bonus.
             </Alert>
           </Box>
 
@@ -331,7 +331,7 @@ const DepositBonusSettings = () => {
             </Alert>
           </Fade>
         )}
-      </Paper> */}
+      </Paper>
     </ThemeProvider>
   );
 };

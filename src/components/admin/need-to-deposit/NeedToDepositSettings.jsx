@@ -136,7 +136,7 @@ const NeedToDepositSettings = () => {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            {/* <Paper
+            <Paper
                 elevation={0}
                 sx={{
                     p: { xs: 2, sm: 3, md: 4 },
@@ -324,7 +324,7 @@ const NeedToDepositSettings = () => {
                         </Alert>
                     </Fade>
                 )}
-            </Paper> */}
+            </Paper>
         </ThemeProvider>
     );
 };

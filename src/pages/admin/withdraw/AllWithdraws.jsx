@@ -515,7 +515,7 @@ function AllWithdraws() {
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.primary' }}>
-                        ₹{withdrawal.withdrawAmount.toLocaleString()}
+                        pkr {withdrawal.withdrawAmount.toLocaleString()}
                       </Typography>
                     </TableCell>
                     <TableCell>

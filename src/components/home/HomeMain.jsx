@@ -22,7 +22,7 @@ import { useAuth } from "../../context/AuthContext";
 import { Badge, Button } from "@mui/material";
 import JackpotSection from "./JackpotSection";
 import { Bell, Gift, Plus } from "lucide-react";
-import TrendingGames from "./TrendingGames";
+// import TrendingGames from "./TrendingGames";
 import GamingProvidersGrid from "./GamingProvidersGrid";
 const HomeMain = ({ children }) => {
   const RhombusIcon = (props) => (
@@ -303,7 +303,7 @@ const HomeMain = ({ children }) => {
           {/* Tabs */}
           {/* <ScrollableTabs/> */}
           <JackpotSection />
-          <TrendingGames />
+          {/* <TrendingGames /> */}
           <ScrollableTabs />
 
           {/* Winning Information */}

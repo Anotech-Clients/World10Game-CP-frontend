@@ -83,7 +83,6 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
-import ImageIcon from "@mui/icons-material/Image";
 
 const drawerWidth = {
   xs: "100%",
@@ -180,7 +179,9 @@ const StyledListItem = styled(ListItem)(({ theme, active, disabled }) => ({
   margin: "6px 12px",
   borderRadius: "12px",
   transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  background: active ? themeColors.gradient.primary : "transparent",
+  background: active
+    ? themeColors.gradient.primary
+    : "transparent",
   opacity: disabled ? 0.5 : 1,
   cursor: disabled ? "not-allowed" : "pointer",
   position: "relative",
@@ -189,9 +190,8 @@ const StyledListItem = styled(ListItem)(({ theme, active, disabled }) => ({
     backgroundColor: disabled
       ? "transparent"
       : active
-      ? undefined
-      : alpha(themeColors.primary.main, 0.1),
-
+        ? undefined
+        : alpha(themeColors.primary.main, 0.1),
     transform: disabled ? "none" : "translateX(4px)",
   },
   "&::before": {
@@ -209,8 +209,8 @@ const StyledListItem = styled(ListItem)(({ theme, active, disabled }) => ({
     color: disabled
       ? themeColors.text.disabled
       : active
-      ? "#ffffff"
-      : themeColors.text.secondary,
+        ? "#ffffff"
+        : themeColors.text.secondary,
     minWidth: {
       xs: "40px",
       sm: "44px",
@@ -227,8 +227,8 @@ const StyledListItem = styled(ListItem)(({ theme, active, disabled }) => ({
     color: disabled
       ? themeColors.text.disabled
       : active
-      ? "#ffffff"
-      : themeColors.text.secondary,
+        ? "#ffffff"
+        : themeColors.text.secondary,
     letterSpacing: "0.02em",
     whiteSpace: "nowrap",
     overflow: "hidden",
@@ -387,6 +387,7 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
 
   const allItems = [
     { text: "Dashboard", icon: <DashboardIcon />, link: "/admin/dashboard" },
+
     {
       text: "Manage Games",
       icon: <SportsEsportsIcon />,
@@ -403,19 +404,14 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
     //   link: "/admin/profit-loss",
     // },
     // {
-    //   text: "Agent Performance",
-    //   icon: <SupportAgentIcon />,
-    //   link: "/admin/agent-performance",
-    // },
-    // {
     //   text: "Tournament",
     //   icon: <TournamentIcon />,
     //   link: "/admin/tournament-management",
     // },
     // {
-    //   text: "Dynamic Spin Event",
-    //   icon: <CasinoIcon />,
-    //   link: "/admin/dynamic-spin-event",
+    //   text: "Agent Performance",
+    //   icon: <SupportAgentIcon />,
+    //   link: "/admin/agent-performance",
     // },
     // { text: "IP Records", icon: <RoomIcon />, link: "/admin/ip-tracking" },
     // {
@@ -448,12 +444,6 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
       icon: <PeopleIcon />,
       subItems: memberItems,
     },
-    // {
-    //   text: "Banner Poster Update",
-    //   icon: isDemoAdmin ? <LockIcon /> : <ImageIcon />,
-    //   link: "/admin/banner-poster-update",
-    //   disabled: isDemoAdmin,
-    // },
     {
       text: "Additional",
       icon: <GiftIcon />,
@@ -485,11 +475,6 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
     //   text: "Edit Bank Details",
     //   icon: <AssuredWorkloadIcon />,
     //   link: "/admin/edit-bank-detail",
-    // },
-    // {
-    //   text: "UPI Management",
-    //   icon: <AccountBalanceWalletIcon />,
-    //   link: "/admin/upi-management",
     // },
     // {
     //   text: "Create User",
@@ -578,42 +563,42 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
       //   link: "/admin/winning-streak-setting",
       //   disabled: isDemoAdmin,
       // },
-      {
-        text: "Activity Setting",
-        icon: isDemoAdmin ? <LockIcon /> : <UpdateIcon />,
-        link: "/admin/activity-reward",
-        disabled: isDemoAdmin,
-      },
+      // {
+      //   text: "Activity Setting",
+      //   icon: isDemoAdmin ? <LockIcon /> : <UpdateIcon />,
+      //   link: "/admin/activity-reward",
+      //   disabled: isDemoAdmin,
+      // },
       // {
       //   text: "Lucky Spin",
       //   icon: isDemoAdmin ? <LockIcon /> : <AnimationIcon />,
       //   link: "/admin/lucky-spin",
       //   disabled: isDemoAdmin,
       // },
-      {
-        text: "Attendance Bonus",
-        icon: isDemoAdmin ? <LockIcon /> : <UpdateIcon />,
-        link: "/admin/attendance-bonus",
-        disabled: isDemoAdmin,
-      },
-      {
-        text: "Invitation Bonus",
-        icon: isDemoAdmin ? <LockIcon /> : <UpdateIcon />,
-        link: "/admin/invitation-bonus",
-        disabled: isDemoAdmin,
-      },
-      {
-        text: "First Deposit Bonus",
-        icon: isDemoAdmin ? <LockIcon /> : <GiftIcon />,
-        link: "/admin/first-deposit-setting",
-        disabled: isDemoAdmin,
-      },
-      {
-        text: "Other Deposit Bonus",
-        icon: isDemoAdmin ? <LockIcon /> : <GiftIcon />,
-        link: "/admin/other-deposit-setting",
-        disabled: isDemoAdmin,
-      },
+      // {
+      //   text: "Attendance Bonus",
+      //   icon: isDemoAdmin ? <LockIcon /> : <UpdateIcon />,
+      //   link: "/admin/attendance-bonus",
+      //   disabled: isDemoAdmin,
+      // },
+      // {
+      //   text: "Invitation Bonus",
+      //   icon: isDemoAdmin ? <LockIcon /> : <UpdateIcon />,
+      //   link: "/admin/invitation-bonus",
+      //   disabled: isDemoAdmin,
+      // },
+      // {
+      //   text: "First Deposit Bonus",
+      //   icon: isDemoAdmin ? <LockIcon /> : <GiftIcon />,
+      //   link: "/admin/first-deposit-setting",
+      //   disabled: isDemoAdmin,
+      // },
+      // {
+      //   text: "Other Deposit Bonus",
+      //   icon: isDemoAdmin ? <LockIcon /> : <GiftIcon />,
+      //   link: "/admin/other-deposit-setting",
+      //   disabled: isDemoAdmin,
+      // },
     ],
     ADDITIONALHEAD: [
       { text: "Dashboard", icon: <DashboardIcon />, link: "/admin/dashboard" },
@@ -647,17 +632,12 @@ const getDrawerItems = (accountType, isDemoAdmin) => {
     SUPPORTHEAD: [
       { text: "Dashboard", icon: <DashboardIcon />, link: "/admin/dashboard" },
       { text: "Members", icon: <PeopleIcon />, link: "/admin/active-users" },
-      // { text: "Support", icon: <HelpIcon />, link: "/admin/support-system" },
-      // {
-      //   text: "Edit Bank Details",
-      //   icon: <AssuredWorkloadIcon />,
-      //   link: "/admin/edit-bank-detail",
-      // },
-      // {
-      //   text: "UPI Management",
-      //   icon: <AccountBalanceWalletIcon />,
-      //   link: "/admin/upi-management",
-      // },
+      { text: "Support", icon: <HelpIcon />, link: "/admin/support-system" },
+      {
+        text: "Edit Bank Details",
+        icon: <AssuredWorkloadIcon />,
+        link: "/admin/edit-bank-detail",
+      },
     ],
   };
 
@@ -671,9 +651,7 @@ const DrawerItem = React.memo(({ item, currentPath, isActive, level = 0 }) => {
   const { isDemoAdmin, checkDemoAdminRestriction } = useAuth();
 
   // Check if any sub-item is active to auto-expand parent
-  const hasActiveSubItem = item.subItems?.some(
-    (subItem) => currentPath === subItem.link
-  );
+  const hasActiveSubItem = item.subItems?.some(subItem => currentPath === subItem.link);
 
   useEffect(() => {
     if (hasActiveSubItem) {
@@ -871,9 +849,7 @@ const ProfileMenu = React.memo(({ anchorEl, handleClose, handleLogout }) => {
           }}
         >
           <ListItemIcon>
-            <PersonIcon
-              sx={{ color: themeColors.text.primary, fontSize: 22 }}
-            />
+            <PersonIcon sx={{ color: themeColors.text.primary, fontSize: 22 }} />
           </ListItemIcon>
           <ListItemText
             primary="Profile"
@@ -1021,6 +997,7 @@ const AdminPanel = ({ children }) => {
               gap: 2,
             }}
           >
+
             <Typography
               sx={{
                 fontFamily: "'Inter', sans-serif",
@@ -1035,6 +1012,7 @@ const AdminPanel = ({ children }) => {
               ADMIN PANEL
             </Typography>
           </Box>
+
         </Toolbar>
         <Divider sx={{ borderColor: themeColors.border.light }} />
         <ScrollContainer>
